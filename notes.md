@@ -1,6 +1,8 @@
 # Backend
 
 ### Doing
+- Need more tests for password package:
+    - Test passwords do NOT contain runes that shouldn't be included (for loop over password string)
 
 ### On deck
 - Create data structure for holding passwords.
