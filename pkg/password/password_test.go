@@ -1,6 +1,7 @@
 package password
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -74,18 +75,53 @@ func TestGenerateReturnsErrorWithBadInput(t *testing.T) {
 	}
 }
 
-// func TestGenerateReturnsPasswordWithCorrectRunes(t *testing.T) {
-// 	tests := []struct {
-// 		upper  bool
-// 		lower  bool
-// 		number bool
-// 		symbol bool
-// 		size   int
-// 	}{
-// 		{true, false, false, false, 100},
-// 		{false, true, false, false, 100},
-// 		{false, false, true, false, 100},
-// 		{false, false, false, true, 100},
-// 		{true, true, true, true, 100},
-// 	}
-// }
+func TestGenerateReturnsPasswordWithCorrectRunes(t *testing.T) {
+	tests := []struct {
+		upper  bool
+		lower  bool
+		number bool
+		symbol bool
+		size   int
+	}{
+		{true, false, false, false, 100},
+		{false, true, false, false, 100},
+		{false, false, true, false, 100},
+		{false, false, false, true, 100},
+		{true, true, false, false, 100},
+		{true, false, true, false, 100},
+		{true, false, false, true, 100},
+		{false, true, true, false, 100},
+		{false, true, false, true, 100},
+		{false, false, true, true, 100},
+		{true, true, true, false, 100},
+		{true, true, false, true, 100},
+		{true, false, true, true, 100},
+		{false, true, true, true, 100},
+		{true, true, true, true, 100},
+	}
+
+	for _, tt := range tests {
+		password, err := Generate(tt.upper, tt.lower, tt.number, tt.symbol, tt.size)
+		if err != nil {
+			t.Fatalf("Generate() err = %v, want nil", err)
+		}
+
+		for _, r := range password {
+			if !tt.upper && strings.ContainsRune(string(upperRunes), r) {
+				t.Fatalf("Got password with upper rune, wanted no upper runes")
+			}
+
+			if !tt.lower && strings.ContainsRune(string(lowerRunes), r) {
+				t.Fatalf("Got password with lower rune, wanted no lower runes")
+			}
+
+			if !tt.number && strings.ContainsRune(string(numberRunes), r) {
+				t.Fatalf("Got password with number rune, wanted no number runes")
+			}
+
+			if !tt.symbol && strings.ContainsRune(string(symbolRunes), r) {
+				t.Fatalf("Got password with symbol rune, wanted no symbol runes")
+			}
+		}
+	}
+}
