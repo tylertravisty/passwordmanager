@@ -1,6 +1,7 @@
 # Backend
 
 ### Doing
+- Test Read/Save functions
 - Check if passwordfile exists
     - If it doesn't exist, create it.
     - File must have a minimum number of bytes -> Create file with 32-byte string in the beginning.
@@ -11,7 +12,7 @@
     - Save at beginning of file: [PBKDF2_salt][bcrypt_hash]
 
 ### On deck
-- Write test for password.Salt function
+- Write test for password.Random function
 - Create data structure for holding secrets.
     - Each sub-field has a name, value, type.
         - Example: [{name: "URL", value: "local.host", type: "text"}, {name: "Password", value: "supersecretpassword", type: "password"}, {name: "Username", value: "user@local.host", type: "text"}]
@@ -19,8 +20,7 @@
     - If password is wrong, display error to user.
 
 ### To Do
-- Check if passwordfile exists
-    - If it doesn't exist, create it. 
+- Add profiles/directories that can be used to organize password entries.
 
 # Frontend
 

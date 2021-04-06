@@ -48,15 +48,15 @@ func Generate(upper, lower, number, symbol bool, size int) (string, error) {
 	return string(password), nil
 }
 
-// Salt creates an array of random bytes with specified size.
-// Salt size of 16 bytes (128 bits) is recommended.
-func Salt(size int) ([]byte, error) {
-	salt := make([]byte, size)
+// Random creates an array of random bytes with specified size.
+// If used to generate password salt, then size of 16 bytes (128 bits) is recommended.
+func Random(size int) ([]byte, error) {
+	random := make([]byte, size)
 
-	_, err := rand.Read(salt)
+	_, err := rand.Read(random)
 	if err != nil {
 		return nil, fmt.Errorf("password: Error while reading random bytes: %v", err)
 	}
 
-	return salt, nil
+	return random, nil
 }
