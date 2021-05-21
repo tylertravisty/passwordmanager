@@ -1,8 +1,10 @@
 package models
 
+import "passwordmanager/internal/file"
+
 // Services holds all of the services for the app.
 type Services struct {
-	FileS FileService
+	FileS file.FileService
 }
 
 // ServicesConfig defines the type all With* functions need to return.
@@ -22,7 +24,7 @@ func NewServices(cfgs ...ServicesConfig) (*Services, error) {
 // WithFile instantiates the FileService.
 func WithFile(path string) ServicesConfig {
 	return func(s *Services) error {
-		s.FileS = NewFileService(path)
+		s.FileS = file.NewFileService(path)
 
 		return nil
 	}
