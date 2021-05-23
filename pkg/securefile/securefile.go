@@ -49,7 +49,7 @@ type ReadSaver struct {
 	Password string
 }
 
-// Read reads the ciphertext from the filepath and decrypts the data using the password.
+// Read reads the ciphertext from the filepath, decrypts the data using the password, and returns the plaintext.
 func (rs *ReadSaver) Read() ([]byte, error) {
 	fileBytes, err := ioutil.ReadFile(rs.Filepath)
 	if err != nil {
@@ -102,28 +102,23 @@ func (rs *ReadSaver) Save(plaintext []byte) error {
 		return fmt.Errorf("Could not add byte prefix to plaintext: %v", err)
 	}
 
-	fmt.Println("Salt")
 	salt, err := libpassword.Random(keySaltSize)
 	if err != nil {
 		return fmt.Errorf("Error while generating salt for encryption key: %v", err)
 	}
 
-	fmt.Println("Key")
 	key := pbkdf2.Key([]byte(rs.Password), salt, keyIter, keyLength, sha256.New)
 
-	fmt.Println("BCrypt")
 	bcryptHash, err := bcrypt.GenerateFromPassword(key, bcryptCost)
 	if len(bcryptHash) != bcryptSize {
 		return fmt.Errorf("Length of generated bcrypt hash %d does not equal expected bcrypt hash size %d", len(bcryptHash), bcryptSize)
 	}
 
-	fmt.Println("New cipher")
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		return fmt.Errorf("Error while creating new AES cipher: %v", err)
 	}
 
-	fmt.Println("New GCM")
 	gcm, err := cipher.NewGCMWithNonceSize(c, gcmNonceSize)
 	if err != nil {
 		return fmt.Errorf("Error while creating new GCM: %v", err)
@@ -138,7 +133,6 @@ func (rs *ReadSaver) Save(plaintext []byte) error {
 		return fmt.Errorf("Error while generating nonce for GCM: %v", err)
 	}
 
-	fmt.Println("Seal")
 	ciphertext := gcm.Seal(nil, nonce, fulltext, nil)
 
 	magic := magicNumber()
@@ -151,7 +145,6 @@ func (rs *ReadSaver) Save(plaintext []byte) error {
 	fileBytes = append(fileBytes, nonce...)
 	fileBytes = append(fileBytes, ciphertext...)
 
-	fmt.Println("Write")
 	err = ioutil.WriteFile(rs.Filepath, fileBytes, 0644)
 	if err != nil {
 		return fmt.Errorf("Error while writing to file: %v", err)

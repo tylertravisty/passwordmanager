@@ -1,7 +1,6 @@
 # Backend
 
 ### Doing
-- Test Read/Save functions
 - Check if passwordfile exists
     - If it doesn't exist, create it.
     - File must have a minimum number of bytes -> Create file with 32-byte string in the beginning.
@@ -21,6 +20,7 @@
 
 ### To Do
 - Add profiles/directories that can be used to organize password entries.
+- Create more tests for securefile Read/Save functions. Test error is returned when expected.
 
 # Frontend
 
