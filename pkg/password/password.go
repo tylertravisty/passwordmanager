@@ -51,6 +51,9 @@ func Generate(upper, lower, number, symbol bool, size int) (string, error) {
 // Random creates an array of random bytes with specified size.
 // If used to generate password salt, then size of 16 bytes (128 bits) is recommended.
 func Random(size int) ([]byte, error) {
+	if size < 0 {
+		return nil, fmt.Errorf("password: Size cannot be less than zero")
+	}
 	random := make([]byte, size)
 
 	_, err := rand.Read(random)

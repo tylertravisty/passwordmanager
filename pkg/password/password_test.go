@@ -44,7 +44,7 @@ func TestGenerateReturnsPasswordWithCorrectSize(t *testing.T) {
 	for _, tt := range tests {
 		password, err := Generate(tt.upper, tt.lower, tt.number, tt.symbol, tt.size)
 		if err != nil {
-			t.Fatalf("Generate() err = %v, want nil", err)
+			t.Fatalf("Want Generate() err = nil, got %v", err)
 		}
 
 		len := len(password)
@@ -103,25 +103,68 @@ func TestGenerateReturnsPasswordWithCorrectRunes(t *testing.T) {
 	for _, tt := range tests {
 		password, err := Generate(tt.upper, tt.lower, tt.number, tt.symbol, tt.size)
 		if err != nil {
-			t.Fatalf("Generate() err = %v, want nil", err)
+			t.Fatalf("Want Generate() err = nil, got %v", err)
 		}
 
 		for _, r := range password {
 			if !tt.upper && strings.ContainsRune(string(upperRunes), r) {
-				t.Fatalf("Got password with upper rune, wanted no upper runes")
+				t.Fatalf("Got password with upper rune, want no upper runes")
 			}
 
 			if !tt.lower && strings.ContainsRune(string(lowerRunes), r) {
-				t.Fatalf("Got password with lower rune, wanted no lower runes")
+				t.Fatalf("Got password with lower rune, want no lower runes")
 			}
 
 			if !tt.number && strings.ContainsRune(string(numberRunes), r) {
-				t.Fatalf("Got password with number rune, wanted no number runes")
+				t.Fatalf("Got password with number rune, want no number runes")
 			}
 
 			if !tt.symbol && strings.ContainsRune(string(symbolRunes), r) {
-				t.Fatalf("Got password with symbol rune, wanted no symbol runes")
+				t.Fatalf("Got password with symbol rune, want no symbol runes")
 			}
+		}
+	}
+}
+
+func TestRandomReturnsCorrectNumberOfBytes(t *testing.T) {
+	tests := []struct {
+		size int
+	}{
+		{0},
+		{3},
+		{45},
+		{20},
+		{100},
+	}
+
+	for _, tt := range tests {
+		randomBytes, err := Random(tt.size)
+		if err != nil {
+			t.Fatalf("Want Random() err = nil, got %v", err)
+		}
+
+		len := len(randomBytes)
+		if len != tt.size {
+			t.Fatalf("len(randomBytes) = %d, want %d", len, tt.size)
+		}
+	}
+}
+
+func TestRandomReturnsErrorWithNegativeSize(t *testing.T) {
+	tests := []struct {
+		size int
+	}{
+		{-1},
+		{-3},
+		{-45},
+		{-20},
+		{-100},
+	}
+
+	for _, tt := range tests {
+		_, err := Random(tt.size)
+		if err == nil {
+			t.Fatalf("Random() err = nil, want not nil")
 		}
 	}
 }

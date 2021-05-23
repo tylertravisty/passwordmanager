@@ -1,11 +1,11 @@
 # Backend
 
 ### Doing
-- Check if passwordfile exists
-    - If it doesn't exist, create it.
+- Write test for password.Random function
 
 ### On deck
-- Write test for password.Random function
+- Check if passwordfile exists
+    - If it doesn't exist, create it.
 - Create data structure for holding secrets.
     - Each sub-field has a name, value, type.
         - Example: [{name: "URL", value: "local.host", type: "text"}, {name: "Password", value: "supersecretpassword", type: "password"}, {name: "Username", value: "user@local.host", type: "text"}]
