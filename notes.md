@@ -3,12 +3,6 @@
 ### Doing
 - Check if passwordfile exists
     - If it doesn't exist, create it.
-    - File must have a minimum number of bytes -> Create file with 32-byte string in the beginning.
-- Encrypt data and write to file
-    - PBKDF2(password, salt) = Key: Use to encrypt file; do NOT store key; need to store salt at beginning of file.
-        - Salt size = 16 bytes
-    - bcrypt(Key): Store at beginning of file to validate password.
-    - Save at beginning of file: [PBKDF2_salt][bcrypt_hash]
 
 ### On deck
 - Write test for password.Random function
