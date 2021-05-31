@@ -1,7 +1,7 @@
 # Backend
 
 ### Doing
-- Write test for password.Random function
+- Change Unlock to React class - not just function.
 
 ### On deck
 - Check if passwordfile exists

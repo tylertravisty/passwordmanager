@@ -12,7 +12,7 @@ require (
 	github.com/pkg/browser v0.0.0-20210115035449-ce105d075bb4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
-	github.com/wailsapp/wails v1.16.0
+	github.com/wailsapp/wails v1.16.3
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
 	golang.org/x/net v0.0.0-20210331212208-0fccb6fa2b5c // indirect
