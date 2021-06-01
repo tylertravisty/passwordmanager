@@ -7,22 +7,22 @@ import (
 )
 
 type Config struct {
-	Filepath string
-	File     ConfigFile
+	Filepath string      `json:"filepath"`
+	File     *ConfigFile `json:"file"`
 }
 
 type ConfigFile struct {
-	PasswordFile PasswordFile `json:"password_file,omitempty"`
+	PasswordFile *PasswordFile `json:"password_file"`
 }
 
 type PasswordFile struct {
-	Path string `json:"path,omitempty"`
+	Path string `json:"path"`
 }
 
 func NewConfig(filepath string) *Config {
 	return &Config{
 		Filepath: filepath,
-		File:     ConfigFile{},
+		File:     &ConfigFile{},
 	}
 }
 
