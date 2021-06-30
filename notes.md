@@ -33,6 +33,8 @@
 - Create dialogue for user to select filepath for password file
 
 ### On deck
+- Create Error page with "/error" route.
+  - If unhandled error occurs, redirect to error screen.
 - Allow user to change filepath from unlock screen (in some kind of menu panel)
 
 ### To Do
