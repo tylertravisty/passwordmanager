@@ -14,9 +14,8 @@ class Home extends React.Component {
 		super(props);
 		this.state = {
 			error: "",
-			hasError: false,
+			onStart: false,
 			passwordFile: false,
-			onStart: false
 		};
 	}
 
@@ -24,12 +23,13 @@ class Home extends React.Component {
 		this.onStart();
 	}
 
-	onStart() {
-		window.backend.PasswordManager.OnStart().then( () => {
-			this.setState({passwordfile: true, onStart: true});
-		}).catch(err => {
-			this.setState({hasError: true, error: err, onStart: true});
-		});
+	async onStart() {
+		try {
+			await window.backend.PasswordManager.OnStart();
+			this.setState({passwordFile: true, onStart: true});
+		} catch(err) {
+			this.setState({error: err, onStart: true});
+		}
 	}
 
 	render() {
@@ -38,7 +38,8 @@ class Home extends React.Component {
 				<div>Loading</div>
 			);
 		}
-		if (this.state.hasError) {
+
+		if (!this.state.passwordFile) {
 			if (this.state.error === ErrPasswordFileEmpty || this.state.error === ErrPasswordFileMissing) {
 				return (
 					<Redirect to="/mainmenu" />
