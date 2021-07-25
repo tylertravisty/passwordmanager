@@ -14,26 +14,26 @@ class Home extends React.Component {
 		super(props);
 		this.state = {
 			error: "",
-			onStart: false,
+			loaded: false,
 			passwordFile: false,
 		};
 	}
 
 	componentDidMount() {
-		this.onStart();
+		this.onMount();
 	}
 
-	async onStart() {
+	async onMount() {
 		try {
 			await window.backend.PasswordManager.OnStart();
-			this.setState({passwordFile: true, onStart: true});
+			this.setState({passwordFile: true, loaded: true});
 		} catch(err) {
-			this.setState({error: err, onStart: true});
+			this.setState({error: err, loaded: true});
 		}
 	}
 
 	render() {
-		if (this.state.onStart === false) {
+		if (this.state.loaded === false) {
 			return (
 				<div>Loading</div>
 			);

@@ -5,10 +5,35 @@ import (
 	"os"
 	"os/user"
 	"passwordmanager/internal/config"
+
+	"github.com/wailsapp/wails"
 )
 
 type PasswordManager struct {
-	Config *config.Config
+	Config  *config.Config
+	runtime *wails.Runtime
+}
+
+func (pm *PasswordManager) WailsInit(runtime *wails.Runtime) error {
+	pm.runtime = runtime
+	return nil
+}
+
+func (pm *PasswordManager) GetPasswordFilePath() (string, error) {
+	if pm.Config.File.PasswordFile.Path == "" {
+		return "", ErrPasswordFilePathEmpty
+	}
+
+	return pm.Config.File.PasswordFile.Path, nil
+}
+
+func (pm *PasswordManager) NewPasswordFile() (string, error) {
+	filepath := pm.runtime.Dialog.SelectSaveFile()
+	fmt.Println(filepath)
+	if filepath == "" {
+		return "", ErrPasswordFilePathInvalid
+	}
+	return filepath, nil
 }
 
 func (pm *PasswordManager) OnStart() error {

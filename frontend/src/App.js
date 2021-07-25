@@ -18,7 +18,7 @@ export default function App() {
 		<Router>
 			<Switch>
 				<Route path="/mainmenu">
-					<TestMainMenu />
+					<MainMenu />
 				</Route>
 				<Route path="/error">
 					<TestError />

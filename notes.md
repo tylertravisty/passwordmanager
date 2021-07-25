@@ -16,6 +16,9 @@
         - Example: [{name: "URL", value: "local.host", type: "text"}, {name: "Password", value: "supersecretpassword", type: "password"}, {name: "Username", value: "user@local.host", type: "text"}]
 - Decrypt/Read passwordfile
     - If password is wrong, display error to user.
+- Add creation dates to each password to track how long a password has been used for (see below for alerting when password is too old).
+- Save settings within password file. Make password file self-contained. Can be transferred to any system.
+  - Include setting for when user should be alerted when password(s) expire.
 
 ### To Do
 - Add profiles/directories that can be used to organize password entries.
@@ -24,6 +27,12 @@
 # Frontend
 
 ### Doing
+- In MainMenu - call GetPasswordFile() - if empty, tell user to create file.
+  - Add functionality to create new file
+    - Ask user for password, check if password is complex.
+    - Show user dialog box to save file.
+    - Generate new securefile using password and filepath from user input.
+      - Handle any errors caused from permission issues at the time the file is being written to.
 - Think about frontend with MemoryRouter like website: do not store data on frontend and pass around to different components. Each component calls the backend for state.
   - Render each component independently based on state from backend.
   - Get to each component from Router NOT from nested components in a parent render function.
@@ -33,6 +42,8 @@
 - Create dialogue for user to select filepath for password file
 
 ### On deck
+- Import existing password file.
+  - Check if file exists. If not, return error and tell user file does not exist.
 - Create Error page with "/error" route.
   - If unhandled error occurs, redirect to error screen.
 - Allow user to change filepath from unlock screen (in some kind of menu panel)

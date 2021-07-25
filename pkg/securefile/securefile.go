@@ -7,7 +7,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"fmt"
-	"io/ioutil"
+	"os"
 	libpassword "passwordmanager/pkg/password"
 
 	"golang.org/x/crypto/bcrypt"
@@ -51,7 +51,7 @@ type ReadSaver struct {
 
 // Read reads the ciphertext from the filepath, decrypts the data using the password, and returns the plaintext.
 func (rs *ReadSaver) Read() ([]byte, error) {
-	fileBytes, err := ioutil.ReadFile(rs.Filepath)
+	fileBytes, err := os.ReadFile(rs.Filepath)
 	if err != nil {
 		return nil, fmt.Errorf("securefile: Could not read file %s: %v", rs.Filepath, err)
 	}
@@ -145,7 +145,7 @@ func (rs *ReadSaver) Save(plaintext []byte) error {
 	fileBytes = append(fileBytes, nonce...)
 	fileBytes = append(fileBytes, ciphertext...)
 
-	err = ioutil.WriteFile(rs.Filepath, fileBytes, 0644)
+	err = os.WriteFile(rs.Filepath, fileBytes, 0644)
 	if err != nil {
 		return fmt.Errorf("securefile: Error while writing to file: %v", err)
 	}

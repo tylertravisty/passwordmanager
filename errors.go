@@ -1,6 +1,8 @@
 package main
 
 const (
+	ErrPasswordFilePathInvalid mainError = "Password file path is not valid"
+
 	ErrPasswordFilePathEmpty mainError = "Password file path is empty"
 
 	ErrPasswordFileMissing mainError = "Password file is missing"
