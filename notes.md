@@ -21,6 +21,7 @@
   - Include setting for when user should be alerted when password(s) expire.
 
 ### To Do
+- Figure out Wails logging subsytem - can you specify a log file? If not, create custom log file functionality.
 - Add profiles/directories that can be used to organize password entries.
 - Create more tests for securefile Read/Save functions. Test error is returned when expected.
 
@@ -33,6 +34,7 @@
     - Show user dialog box to save file.
     - Generate new securefile using password and filepath from user input.
       - Handle any errors caused from permission issues at the time the file is being written to.
+    - Send user to Unlock screen
 - Think about frontend with MemoryRouter like website: do not store data on frontend and pass around to different components. Each component calls the backend for state.
   - Render each component independently based on state from backend.
   - Get to each component from Router NOT from nested components in a parent render function.

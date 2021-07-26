@@ -24,7 +24,7 @@ export default function App() {
 					<TestError />
 				</Route>
 				<Route path="/unlock">
-					<TestUnlock />
+					<Unlock />
 				</Route>
 				<Route path="/">
 					<Home />

@@ -5,17 +5,21 @@ import (
 	"os"
 	"os/user"
 	"passwordmanager/internal/config"
+	"passwordmanager/pkg/securefile"
 
 	"github.com/wailsapp/wails"
 )
 
 type PasswordManager struct {
 	Config  *config.Config
+	rs      securefile.ReadSaver
+	log     *wails.CustomLogger
 	runtime *wails.Runtime
 }
 
 func (pm *PasswordManager) WailsInit(runtime *wails.Runtime) error {
 	pm.runtime = runtime
+	pm.log = runtime.Log.New("Password Manager")
 	return nil
 }
 
@@ -33,6 +37,25 @@ func (pm *PasswordManager) NewPasswordFile() (string, error) {
 	if filepath == "" {
 		return "", ErrPasswordFilePathInvalid
 	}
+
+	pm.rs.Filepath = filepath
+	// TODO: ask user for password
+	pm.rs.Password = "test1234"
+	err := pm.rs.Save([]byte{})
+	if err != nil {
+		// TODO: log error from Save to application log file
+		pm.log.Errorf("Failed to save password file: %v", err)
+		return "", ErrPasswordFileSave
+	}
+
+	pm.Config.File.PasswordFile.Path = filepath
+	err = pm.Config.Save()
+	if err != nil {
+		// TODO: specify what function logged this error
+		pm.log.Errorf("Failed to save config file: %v", err)
+		return "", ErrConfigFileSave
+	}
+
 	return filepath, nil
 }
 
