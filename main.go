@@ -32,7 +32,7 @@ func main() {
 		Title:     "Password Manager",
 		JS:        js,
 		CSS:       css,
-		Colour:    "#131313",
+		Colour:    "#FFFFFF",
 		Resizable: true,
 	})
 	app.Bind(pm)

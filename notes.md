@@ -28,13 +28,22 @@
 # Frontend
 
 ### Doing
+- Implement Unlock page
+  - decrypt the password file
+  - redirect user to password manager screen
 - In MainMenu - call GetPasswordFile() - if empty, tell user to create file.
   - Add functionality to create new file
-    - Ask user for password, check if password is complex.
+    - Ask user for password
+      - Check if password is complex (can be done in frontend).
+        - red/yellow/green meter that indicates complexity of password
+        - too simple/good/great
+        - Add conditional to only show password complexity on first password input.
+        - Only show password complexity once user starts typing (think about this behavior)
     - Show user dialog box to save file.
     - Generate new securefile using password and filepath from user input.
       - Handle any errors caused from permission issues at the time the file is being written to.
     - Send user to Unlock screen
+      - If user hits "Cancel" button on save file screen, it does not redirect to Unlock - need to handle this case.
 - Think about frontend with MemoryRouter like website: do not store data on frontend and pass around to different components. Each component calls the backend for state.
   - Render each component independently based on state from backend.
   - Get to each component from Router NOT from nested components in a parent render function.
@@ -44,6 +53,7 @@
 - Create dialogue for user to select filepath for password file
 
 ### On deck
+- If password file is missing, provide user with error message.
 - Import existing password file.
   - Check if file exists. If not, return error and tell user file does not exist.
 - Create Error page with "/error" route.

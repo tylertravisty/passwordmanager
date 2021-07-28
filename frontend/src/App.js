@@ -3,6 +3,7 @@ import './App.css';
 import Home from './components/Home';
 import Unlock from './components/Unlock';
 import MainMenu from './components/MainMenu';
+import NewPasswordFile from './components/NewPasswordFile';
 
 
 import {
@@ -22,6 +23,9 @@ export default function App() {
 				</Route>
 				<Route path="/error">
 					<TestError />
+				</Route>
+				<Route path="/newpasswordfile">
+					<NewPasswordFile />
 				</Route>
 				<Route path="/unlock">
 					<Unlock />
@@ -50,6 +54,18 @@ function TestError() {
 	return (
 		<div className="App">
 			<h2>Error</h2>
+			<Link to="/mainmenu">MainMenu</Link><br/>
+			<Link to="/unlock">Unlock</Link><br/>
+			<Link to="/">Home</Link><br/>
+		</div>
+	);
+}
+
+
+function TestNewPasswordFile() {
+	return (
+		<div className="App">
+			<h2>NewPasswordFile</h2>
 			<Link to="/mainmenu">MainMenu</Link><br/>
 			<Link to="/unlock">Unlock</Link><br/>
 			<Link to="/">Home</Link><br/>

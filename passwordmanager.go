@@ -31,7 +31,8 @@ func (pm *PasswordManager) GetPasswordFilePath() (string, error) {
 	return pm.Config.File.PasswordFile.Path, nil
 }
 
-func (pm *PasswordManager) NewPasswordFile() (string, error) {
+func (pm *PasswordManager) NewPasswordFile(unlockPassword string) (string, error) {
+	fmt.Println("Unlock password:", unlockPassword)
 	filepath := pm.runtime.Dialog.SelectSaveFile()
 	fmt.Println(filepath)
 	if filepath == "" {
@@ -40,7 +41,7 @@ func (pm *PasswordManager) NewPasswordFile() (string, error) {
 
 	pm.rs.Filepath = filepath
 	// TODO: ask user for password
-	pm.rs.Password = "test1234"
+	pm.rs.Password = unlockPassword
 	err := pm.rs.Save([]byte{})
 	if err != nil {
 		// TODO: log error from Save to application log file

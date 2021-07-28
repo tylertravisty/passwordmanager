@@ -1,6 +1,8 @@
 import React from 'react';
 import './MainMenu.css';
 
+import { Link } from "react-router-dom";
+
 class MainMenu extends React.Component {
 	constructor(props) {
 		super(props);
@@ -53,9 +55,9 @@ class MainMenu extends React.Component {
 			<div className="MainMenu">
 				Main Menu
 				<div style={{border: !this.state.passwordFilePath === "" ? '2px solid Black':'2px solid Tomato'}}>
-					<form onSubmit={this.addFileHandler}>
-						<button>New Password File</button>
-					</form>
+					<Link to={'/newpasswordfile'}>
+						<button > New Password File </button>
+					</Link>
 				</div>
 			</div>
 		);
