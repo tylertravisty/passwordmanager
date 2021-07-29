@@ -2,35 +2,17 @@
 # On Deck
 # To Do
 
-- (Password File) Password file layout
-	- Store 
-		- Category
-			- Secret
-				- Entry
-	- Settings
-- (Password File) Entry will have the following fields: name, value, type, date created, expiration date, etc.
-	- Example: [{name: "URL", value: "local.host", type: "URL"}, {name: "Password", value: "supersecretpassword", type: "password"}, {name: "Username", value: "user@local.host", type: "username"}]
-- (Password File) Entry types include: username, password, phone number, URL, etc.
-- (Password File) Layout example
-	- Twitter (Secret)
-		- username (Entry)
-		{"name": "username", "value": "myusername", "type": "text"}
-		- password (Entry)
-		{"name": "password", "value": "mysupersecretpassword", "type": "text"}
-- (Password File) Create data structure for holding records.
-	- Each entry has a name, value, type, date created, expiration date.
-		- Example: [{name: "URL", value: "local.host", type: "text"}, {name: "Password", value: "supersecretpassword", type: "password"}, {name: "Username", value: "user@local.host", type: "text"}]
-- (Password File) Add creation dates to each password to track how long a password has been used for (see below for alerting when password is too old).
-- (Passowrd File) Save settings within password file. Make password file self-contained. Can be transferred to any system.
-	- Include setting for when user should be alerted when password(s) expire.
+- (Password Manager) Implement Password Manager page
+- (Password Manager) Password entries should have optional fields: date created, expiration date.
+- (Password Manager) Implement alerts when passwords reach expiration date.
+- (Password Manager) Implement entry types : username, password, phone number, URL, email, etc.
+- (Password Manager) Implement categories for organizing secrets.
+- (Password Manager) Allow users to have multiple passwordfiles with different passwords that can be selected from the unlock screen.
 
 - (Unlock) Implement Unlock page
-	- Unlock password file with password passed from frontend, return success/fail to user.
+	- Decrypt and load password file with password passed from frontend, return success/fail to user.
 		- If password is correct, redirect to password manager page.
 		- If password is wrong, display error to user.
-	- decrypt the password file
-	- redirect user to password manager screen
-- (Unlock) Return password success/fail to user
 
 - (New Password File) Check if password is complex (can be done in frontend).
 	- red/yellow/green meter that indicates complexity of password
@@ -51,8 +33,6 @@
 	- Is this even needed? All errors may be handled by their respective views.
 - (Error) Log internal errors to log file.
 
-- (Feature) Allow users to have multiple passwordfiles with different passwords that can be selected from the unlock screen.
-- (Feature) Handle filepaths (config and passwordfile) for non-Nix operating systems (Windows)
-- (Feature) Add profiles/directories/categories that can be used to organize secrets.
+- (OS Support) Handle filepaths (config and passwordfile) for non-Nix operating systems (Windows)
 
 - (Test) Create more tests for securefile Read/Save functions. Test error is returned when expected.

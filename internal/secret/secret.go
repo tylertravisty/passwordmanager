@@ -2,18 +2,33 @@ package secret
 
 // Store holds all secret entries.
 type Store struct {
-	Entries map[string]Entry
+	Name       string     `json:"name,omitempty"`
+	Categories []Category `json:"categories,omitempty"`
 }
 
-// Entry holds a single secret entry.
+// Category organizes the secrets.
+type Category struct {
+	Name    string   `json:"name,omitempty"`
+	Secrets []Secret `json:"secrets,omitempty"`
+}
+
+// Secret holds individual entries.
+type Secret struct {
+	Name    string  `json:"name,omitempty"`
+	Entries []Entry `json:"entries,omitempty"`
+}
+
+// Entry is a single entry within each secret.
 type Entry struct {
-	Category string
-	Fields   []Field
+	Name   string           `json:"name,omitempty"`
+	Type   string           `json:"type,omitempty"`
+	Value  string           `json:"value,omitempty"`
+	Fields map[string]Field `json:"fields,omitempty"`
 }
 
-// Field is a single field within each secret.
+// Field allows for entries to be expanded.
 type Field struct {
-	Name  string
-	Type  string
-	Value string
+	Name  string `json:"name,omitempty"`
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
 }

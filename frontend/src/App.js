@@ -27,6 +27,9 @@ export default function App() {
 				<Route path="/newpasswordfile">
 					<NewPasswordFile />
 				</Route>
+				<Route path="/passwordmanager">
+					<TestPasswordManager />
+				</Route>
 				<Route path="/unlock">
 					<Unlock />
 				</Route>
@@ -45,6 +48,14 @@ function TestMainMenu() {
 			<Link to="/error">Error</Link><br/>
 			<Link to="/unlock">Unlock</Link><br/>
 			<Link to="/">Home</Link><br/>
+		</div>
+	);
+}
+
+function TestPasswordManager() {
+	return (
+		<div className="App">
+			<h2>Password Manager</h2>
 		</div>
 	);
 }
