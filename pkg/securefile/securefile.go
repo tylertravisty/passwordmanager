@@ -68,6 +68,9 @@ func (rs *ReadSaver) Read() ([]byte, error) {
 
 	err = bcrypt.CompareHashAndPassword(bcryptHash, key)
 	if err != nil {
+		if err == bcrypt.ErrMismatchedHashAndPassword {
+			return nil, ErrInvalidPassword
+		}
 		return nil, fmt.Errorf("securefile: Could not verify password is valid: %v", err)
 	}
 

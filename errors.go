@@ -3,6 +3,8 @@ package main
 const (
 	ErrConfigFileSave mainError = "Failed to save config file"
 
+	ErrInvalidUnlockPassword mainError = "Unlock password is invalid"
+
 	ErrPasswordFilePathInvalid mainError = "Password file path is not valid"
 
 	ErrPasswordFilePathEmpty mainError = "Password file path is empty"
@@ -10,6 +12,8 @@ const (
 	ErrPasswordFileMissing mainError = "Password file is missing"
 
 	ErrPasswordFileOpen mainError = "Failed to open password file"
+
+	ErrPasswordFileRead mainError = "Failed to read password file"
 
 	ErrPasswordFileSave mainError = "Failed to save password file"
 )

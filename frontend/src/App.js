@@ -56,6 +56,7 @@ function TestPasswordManager() {
 	return (
 		<div className="App">
 			<h2>Password Manager</h2>
+			<Link to="/unlock">Unlock</Link><br/>
 		</div>
 	);
 }

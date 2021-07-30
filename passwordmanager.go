@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/user"
 	"passwordmanager/internal/config"
+	"passwordmanager/internal/secret"
 	"passwordmanager/pkg/securefile"
 
 	"github.com/wailsapp/wails"
@@ -12,6 +13,7 @@ import (
 
 type PasswordManager struct {
 	Config  *config.Config
+	Store   *secret.Store
 	rs      securefile.ReadSaver
 	log     *wails.CustomLogger
 	runtime *wails.Runtime
@@ -58,6 +60,21 @@ func (pm *PasswordManager) NewPasswordFile(unlockPassword string) (string, error
 	}
 
 	return filepath, nil
+}
+
+func (pm *PasswordManager) UnlockPasswordFile(unlockPassword string) error {
+	pm.rs.Filepath = pm.Config.File.PasswordFile.Path
+	pm.rs.Password = unlockPassword
+
+	_, err := pm.rs.Read()
+	if err != nil {
+		if err == securefile.ErrInvalidPassword {
+			return ErrInvalidUnlockPassword
+		}
+		pm.log.Errorf("Failed to read password file: %v", err)
+		return ErrPasswordFileRead
+	}
+	return nil
 }
 
 func (pm *PasswordManager) OnStart() error {

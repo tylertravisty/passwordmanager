@@ -6,6 +6,7 @@ class NewPasswordFile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			error: "",
 			dialog: "Set unlock password",
 			complexity: "",
 			password: "",
