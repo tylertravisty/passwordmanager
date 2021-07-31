@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/user"
@@ -34,17 +35,29 @@ func (pm *PasswordManager) GetPasswordFilePath() (string, error) {
 }
 
 func (pm *PasswordManager) NewPasswordFile(unlockPassword string) (string, error) {
-	fmt.Println("Unlock password:", unlockPassword)
 	filepath := pm.runtime.Dialog.SelectSaveFile()
-	fmt.Println(filepath)
 	if filepath == "" {
 		return "", ErrPasswordFilePathInvalid
 	}
 
 	pm.rs.Filepath = filepath
-	// TODO: ask user for password
 	pm.rs.Password = unlockPassword
-	err := pm.rs.Save([]byte{})
+
+	newStore := secret.Store{
+		Categories: []secret.Category{
+			{
+				Secrets: []secret.Secret{},
+			},
+		},
+	}
+	jsonStore, err := json.Marshal(newStore)
+	if err != nil {
+		pm.log.Errorf("Failed to marshal new secret store into JSON object: %v", err)
+		// TODO: should there be a different error here?
+		return "", ErrPasswordFileSave
+	}
+
+	err = pm.rs.Save(jsonStore)
 	if err != nil {
 		// TODO: log error from Save to application log file
 		pm.log.Errorf("Failed to save password file: %v", err)
@@ -62,11 +75,20 @@ func (pm *PasswordManager) NewPasswordFile(unlockPassword string) (string, error
 	return filepath, nil
 }
 
+func (pm *PasswordManager) LockPasswordFile() error {
+	// TODO: check if string can be overwriten in memory
+	pm.rs.Password = ""
+	// TODO: check if Store can be manually wiped from memory
+	pm.Store = nil
+
+	return nil
+}
+
 func (pm *PasswordManager) UnlockPasswordFile(unlockPassword string) error {
 	pm.rs.Filepath = pm.Config.File.PasswordFile.Path
 	pm.rs.Password = unlockPassword
 
-	_, err := pm.rs.Read()
+	jsonStore, err := pm.rs.Read()
 	if err != nil {
 		if err == securefile.ErrInvalidPassword {
 			return ErrInvalidUnlockPassword
@@ -74,6 +96,16 @@ func (pm *PasswordManager) UnlockPasswordFile(unlockPassword string) error {
 		pm.log.Errorf("Failed to read password file: %v", err)
 		return ErrPasswordFileRead
 	}
+
+	var store secret.Store
+	err = json.Unmarshal(jsonStore, &store)
+	if err != nil {
+		pm.log.Errorf("Failed to unmarshal secret store into JSON object: %v", err)
+		// TODO: should there be a different error here?
+		return ErrPasswordFileRead
+	}
+	pm.Store = &store
+
 	return nil
 }
 

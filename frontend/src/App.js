@@ -4,6 +4,7 @@ import Home from './components/Home';
 import Unlock from './components/Unlock';
 import MainMenu from './components/MainMenu';
 import NewPasswordFile from './components/NewPasswordFile';
+import PasswordManager from './components/PasswordManager';
 
 
 import {
@@ -28,7 +29,7 @@ export default function App() {
 					<NewPasswordFile />
 				</Route>
 				<Route path="/passwordmanager">
-					<TestPasswordManager />
+					<PasswordManager />
 				</Route>
 				<Route path="/unlock">
 					<Unlock />
@@ -55,7 +56,7 @@ function TestMainMenu() {
 function TestPasswordManager() {
 	return (
 		<div className="App">
-			<h2>Password Manager</h2>
+			<h2>Test Password Manager</h2>
 			<Link to="/unlock">Unlock</Link><br/>
 		</div>
 	);

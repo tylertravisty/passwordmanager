@@ -44,7 +44,6 @@ class MainMenu extends React.Component {
 	}
 
 	render() {
-		console.log("Filepath:", this.state.passwordFilePath);
 		if (this.state.loaded === false) {
 			return (
 				<div>Loading</div>

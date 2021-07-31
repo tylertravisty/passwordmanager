@@ -10,10 +10,24 @@ class Unlock extends React.Component {
 		this.state = {
 			dialog: "Enter password to unlock",
 			error: "",
+			loaded: false,
 			password: "",
 			show: false,
 			gotoPasswordManager: false
 		};
+	}
+
+	componentDidMount() {
+		this.onMount();
+	}
+
+	async onMount() {
+		try {
+			await window.backend.PasswordManager.LockPasswordFile();
+			this.setState({loaded: true});
+		} catch(err) {
+			this.setState({error: err, loaded: true});
+		}
 	}
 
 	passwordChangeHandler = event => {

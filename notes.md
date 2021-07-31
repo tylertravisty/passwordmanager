@@ -1,10 +1,6 @@
 # Doing
 
 # On Deck
-- (New Password File) Create and write (struct->jsonstring) an empty Secret Store when the new password file is created.
-- (Unlock) Read the secret store and store in pm object (jsonstring->struct).
-- (SecureFile) Add function to securefile package to *test* password without returning contents.
-	- Write tests to test this function.
 
 # To Do
 
@@ -37,3 +33,6 @@
 - (OS Support) Handle filepaths (config and passwordfile) for non-Nix operating systems (Windows)
 
 - (Test) Create more tests for securefile Read/Save functions. Test error is returned when expected.
+
+- (SecureFile) Add function to securefile package to *test* password without returning contents.
+	- Write tests to test this function.
