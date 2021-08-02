@@ -1,10 +1,15 @@
 # Doing
+- (Password Manager) Implement Password Manager page
+	- Develop UI components
+		- categories, secrets, entries
+		- Allow user to manually update
+	- Implement random password generation
+	- Update secret store in backend when user makes changes
 
 # On Deck
 
 # To Do
 
-- (Password Manager) Implement Password Manager page
 - (Password Manager) Password entries should have optional fields: date created, expiration date.
 - (Password Manager) Implement alerts when passwords reach expiration date.
 - (Password Manager) Implement entry types : username, password, phone number, URL, email, etc.

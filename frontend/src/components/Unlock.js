@@ -53,6 +53,12 @@ class Unlock extends React.Component {
 	}
 
 	render() {
+		if (this.state.loaded === false) {
+			return (
+				<div>Loading</div>
+			);
+		}
+
 		if (this.state.gotoPasswordManager) {
 			return (
 				<Redirect to="/passwordmanager" />

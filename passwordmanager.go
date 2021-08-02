@@ -34,6 +34,20 @@ func (pm *PasswordManager) GetPasswordFilePath() (string, error) {
 	return pm.Config.File.PasswordFile.Path, nil
 }
 
+func (pm *PasswordManager) GetSecretStore() (string, error) {
+	if pm.Store == nil {
+		return "", ErrSecretStoreNotSet
+	}
+
+	jsonStore, err := json.Marshal(pm.Store)
+	if err != nil {
+		pm.log.Errorf("Failed to marshal secret store in JSON object: %v", err)
+		return "", ErrSecretStoreRead
+	}
+
+	return string(jsonStore), nil
+}
+
 func (pm *PasswordManager) NewPasswordFile(unlockPassword string) (string, error) {
 	filepath := pm.runtime.Dialog.SelectSaveFile()
 	if filepath == "" {

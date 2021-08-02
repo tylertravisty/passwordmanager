@@ -16,6 +16,10 @@ const (
 	ErrPasswordFileRead mainError = "Failed to read password file"
 
 	ErrPasswordFileSave mainError = "Failed to save password file"
+
+	ErrSecretStoreNotSet mainError = "Secret store has not been set"
+
+	ErrSecretStoreRead mainError = "Failed to read secret store"
 )
 
 type mainError string
