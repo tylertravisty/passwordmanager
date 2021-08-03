@@ -8,6 +8,7 @@ import (
 	"passwordmanager/internal/config"
 	"passwordmanager/internal/secret"
 	"passwordmanager/pkg/securefile"
+	"reflect"
 
 	"github.com/wailsapp/wails"
 )
@@ -39,13 +40,34 @@ func (pm *PasswordManager) GetSecretStore() (string, error) {
 		return "", ErrSecretStoreNotSet
 	}
 
-	jsonStore, err := json.Marshal(pm.Store)
+	secretStoreJSON, err := json.Marshal(pm.Store)
 	if err != nil {
 		pm.log.Errorf("Failed to marshal secret store in JSON object: %v", err)
 		return "", ErrSecretStoreRead
 	}
 
-	return string(jsonStore), nil
+	return string(secretStoreJSON), nil
+}
+
+func (pm *PasswordManager) SetSecretStore(secretStoreStr string) error {
+	tempStore := *pm.Store
+	err := json.Unmarshal([]byte(secretStoreStr), pm.Store)
+	if err != nil {
+		pm.log.Errorf("Failed to unmarhsal secret store string: %v", err)
+		return ErrSecretStoreWrite
+	}
+
+	if reflect.DeepEqual(tempStore, *pm.Store) {
+		return nil
+	}
+
+	err = pm.rs.Save([]byte(secretStoreStr))
+	if err != nil {
+		pm.log.Errorf("Failed to update secret store: %v", err)
+		return ErrSecretStoreWrite
+	}
+
+	return nil
 }
 
 func (pm *PasswordManager) NewPasswordFile(unlockPassword string) (string, error) {

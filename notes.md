@@ -1,12 +1,12 @@
 # Doing
-- (Password Manager) Implement Password Manager page
-	- Develop UI components
-		- categories, secrets, entries
-		- Allow user to manually update
-	- Implement random password generation
-	- Update secret store in backend when user makes changes
 
 # On Deck
+- (Password Manager) Implement Password Manager page
+	- Develop UI components
+		- secrets, entries
+		- categories(is this needed?)
+		- Allow user to manually update
+	- Implement random password generation
 
 # To Do
 

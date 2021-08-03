@@ -20,6 +20,8 @@ const (
 	ErrSecretStoreNotSet mainError = "Secret store has not been set"
 
 	ErrSecretStoreRead mainError = "Failed to read secret store"
+
+	ErrSecretStoreWrite mainError = "Failed to write secret store"
 )
 
 type mainError string

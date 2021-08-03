@@ -32,8 +32,8 @@ class NewPasswordFile extends React.Component {
 	};
 
 	submitPasswordHandler = event => {
-		const tempPassword = this.state.inputPassword
 		event.preventDefault();
+		const tempPassword = this.state.inputPassword
 		if (!this.state.showVerify) {
 			this.setState({dialog: "Re-enter password", password: tempPassword, inputPassword: "", showVerify: true})
 		} else {

@@ -12,6 +12,7 @@ class PasswordManager extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			editing: false,
 			error: "",
 			loaded: false,
 			secretStore: {}
@@ -24,11 +25,35 @@ class PasswordManager extends React.Component {
 
 	async onMount() {
 		try {
-			const strStore = await window.backend.PasswordManager.GetSecretStore();
-			let jsonStore = JSON.parse(strStore);
-			this.setState({secretStore: jsonStore, loaded: true});
+			const secretStoreStr = await window.backend.PasswordManager.GetSecretStore();
+			let secretStoreJSON = JSON.parse(secretStoreStr);
+			this.setState({secretStore: secretStoreJSON, loaded: true});
 		} catch(err) {
 			this.setState({error: err, loaded: true});
+		}
+	}
+
+	editHandler = event => {
+		this.setState({editing: true});
+	};
+
+	nameChangeHandler = event => {
+		let tempStore = this.state.secretStore
+		tempStore.name = event.target.value
+		this.setState({secretStore: tempStore});
+	};
+
+	saveHandler = event => {
+		this.updateSecretStore()
+	}
+
+	async updateSecretStore() {
+		try {
+			const secretStoreStr = JSON.stringify(this.state.secretStore)
+			await window.backend.PasswordManager.SetSecretStore(secretStoreStr);
+			this.setState({editing: false});
+		} catch(err) {
+			this.setState({error: err, editing: false});
 		}
 	}
 
@@ -47,15 +72,27 @@ class PasswordManager extends React.Component {
 			}
 		}
 
-		return (
-			<div className="App">
-				<h2>Real Password Manager</h2>
-				<Link to={'/unlock'}>
-					<button > Lock </button>
-				</Link>
-				{JSON.stringify(this.state.secretStore)}
-			</div>
-		)
+		if (this.state.editing) {
+			return (
+				<div className="App">
+					<Link to={'/unlock'}>
+						<button> Lock </button>
+					</Link>
+					<button onClick={this.saveHandler}> Save </button>
+					<h2><input type="text" name="secretStoreName" value={this.state.secretStore.name} onChange={this.nameChangeHandler}/></h2>
+				</div>
+			)
+		} else {
+			return (
+				<div className="App">
+					<Link to={'/unlock'}>
+						<button> Lock </button>
+					</Link>
+					<button onClick={this.editHandler}> Edit </button>
+					<h2>{this.state.secretStore.name == "" ? "Empty Name" : this.state.secretStore.name}</h2>
+				</div>
+			)
+		}
 	}
 }
 
