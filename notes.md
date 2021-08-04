@@ -2,6 +2,8 @@
 
 # On Deck
 - (Password Manager) Implement Password Manager page
+	- Move "Add Secret" button to editing state only
+	- Display secrets as links to their own pages
 	- Develop UI components
 		- secrets, entries
 		- categories(is this needed?)

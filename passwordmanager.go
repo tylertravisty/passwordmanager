@@ -50,8 +50,20 @@ func (pm *PasswordManager) GetSecretStore() (string, error) {
 }
 
 func (pm *PasswordManager) SetSecretStore(secretStoreStr string) error {
-	tempStore := *pm.Store
-	err := json.Unmarshal([]byte(secretStoreStr), pm.Store)
+	pmStoreStr, err := json.Marshal(*pm.Store)
+	if err != nil {
+		pm.log.Errorf("Failed to marhsal password manager store: %v", err)
+		return ErrSecretStoreWrite
+	}
+
+	var tempStore secret.Store
+	err = json.Unmarshal(pmStoreStr, &tempStore)
+	if err != nil {
+		pm.log.Errorf("Failed to unmarhsal password manager store string: %v", err)
+		return ErrSecretStoreWrite
+	}
+
+	err = json.Unmarshal([]byte(secretStoreStr), pm.Store)
 	if err != nil {
 		pm.log.Errorf("Failed to unmarhsal secret store string: %v", err)
 		return ErrSecretStoreWrite

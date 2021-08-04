@@ -44,6 +44,8 @@ class PasswordManager extends React.Component {
 	};
 
 	saveHandler = event => {
+		console.log("Entering save handler");
+		console.log(this.state.secretStore);
 		this.updateSecretStore()
 	}
 
@@ -53,8 +55,19 @@ class PasswordManager extends React.Component {
 			await window.backend.PasswordManager.SetSecretStore(secretStoreStr);
 			this.setState({editing: false});
 		} catch(err) {
+			console.log("Error:", err);
 			this.setState({error: err, editing: false});
 		}
+	}
+
+	addSecretHandler = event => {
+		let tempStore = this.state.secretStore;
+		let newSecret = {name: "New Secret"};
+		if (!tempStore.categories[0].hasOwnProperty("secrets")) {
+			tempStore.categories[0].secrets = [];
+		}
+		tempStore.categories[0].secrets.push(newSecret);
+		this.setState({secretStore: tempStore});
 	}
 
 	render() {
@@ -79,6 +92,7 @@ class PasswordManager extends React.Component {
 						<button> Lock </button>
 					</Link>
 					<button onClick={this.saveHandler}> Save </button>
+					<button onClick={this.addSecretHandler}> Add Secret </button>
 					<h2><input type="text" name="secretStoreName" value={this.state.secretStore.name} onChange={this.nameChangeHandler}/></h2>
 				</div>
 			)
@@ -89,7 +103,9 @@ class PasswordManager extends React.Component {
 						<button> Lock </button>
 					</Link>
 					<button onClick={this.editHandler}> Edit </button>
+					<button onClick={this.addSecretHandler}> Add Secret </button>
 					<h2>{this.state.secretStore.name == "" ? "Empty Name" : this.state.secretStore.name}</h2>
+					{JSON.stringify(this.state.secretStore)}
 				</div>
 			)
 		}
