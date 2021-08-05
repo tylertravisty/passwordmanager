@@ -92,6 +92,7 @@ func (pm *PasswordManager) NewPasswordFile(unlockPassword string) (string, error
 	pm.rs.Password = unlockPassword
 
 	newStore := secret.Store{
+		Name: "New Secret Store",
 		Categories: []secret.Category{
 			{
 				Secrets: []secret.Secret{},

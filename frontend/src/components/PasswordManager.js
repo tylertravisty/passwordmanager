@@ -4,6 +4,7 @@ import {
 	Redirect
 } from "react-router-dom";
 
+import AddSecret from './AddSecret';
 import {
 	ErrSecretStoreNotSet
 } from './Error.js';
@@ -12,6 +13,7 @@ class PasswordManager extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			addSecret: false,
 			editing: false,
 			error: "",
 			loaded: false,
@@ -61,19 +63,45 @@ class PasswordManager extends React.Component {
 	}
 
 	addSecretHandler = event => {
+		//let tempStore = this.state.secretStore;
+		//let newSecret = {name: "New Secret"};
+		//if (!tempStore.categories[0].hasOwnProperty("secrets")) {
+		//	tempStore.categories[0].secrets = [];
+		//}
+		//tempStore.categories[0].secrets.push(newSecret);
+		//this.setState({secretStore: tempStore});
+		this.setState({addSecret: true});
+	}
+
+	submitSecretNameHandler = event => {
+		event.preventDefault();
 		let tempStore = this.state.secretStore;
-		let newSecret = {name: "New Secret"};
+		let newSecret = {name: event.target.querySelector('input').getAttribute('value')};
 		if (!tempStore.categories[0].hasOwnProperty("secrets")) {
 			tempStore.categories[0].secrets = [];
 		}
 		tempStore.categories[0].secrets.push(newSecret);
 		this.setState({secretStore: tempStore});
+		this.setState({addSecret: false});
+	};
+
+	cancelAddSecretHandler = event => {
+		this.setState({addSecret: false});
 	}
 
 	render() {
 		if (this.state.loaded === false) {
 			return (
 				<div>Loading</div>
+			);
+		}
+
+		if (this.state.addSecret) {
+			return (
+				<AddSecret
+					submitSecretNameHandler={this.submitSecretNameHandler}
+					cancelAddSecretHandler={this.cancelAddSecretHandler}
+				/>
 			);
 		}
 
@@ -89,21 +117,21 @@ class PasswordManager extends React.Component {
 			return (
 				<div className="App">
 					<Link to={'/unlock'}>
-						<button> Lock </button>
+						<button className="Lock"> Lock </button>
 					</Link>
 					<button onClick={this.saveHandler}> Save </button>
 					<button onClick={this.addSecretHandler}> Add Secret </button>
 					<h2><input type="text" name="secretStoreName" value={this.state.secretStore.name} onChange={this.nameChangeHandler}/></h2>
+					{JSON.stringify(this.state.secretStore)}
 				</div>
 			)
 		} else {
 			return (
 				<div className="App">
 					<Link to={'/unlock'}>
-						<button> Lock </button>
+						<button className="Lock"> Lock </button>
 					</Link>
 					<button onClick={this.editHandler}> Edit </button>
-					<button onClick={this.addSecretHandler}> Add Secret </button>
 					<h2>{this.state.secretStore.name == "" ? "Empty Name" : this.state.secretStore.name}</h2>
 					{JSON.stringify(this.state.secretStore)}
 				</div>

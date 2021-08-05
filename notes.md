@@ -2,8 +2,8 @@
 
 # On Deck
 - (Password Manager) Implement Password Manager page
-	- Move "Add Secret" button to editing state only
-	- Display secrets as links to their own pages
+	- Display secrets as buttons to their own pages (secret component is a child of PM)
+	- Delete secrets
 	- Develop UI components
 		- secrets, entries
 		- categories(is this needed?)
@@ -17,6 +17,8 @@
 - (Password Manager) Implement entry types : username, password, phone number, URL, email, etc.
 - (Password Manager) Implement categories for organizing secrets.
 - (Password Manager) Allow users to have multiple passwordfiles with different passwords that can be selected from the unlock screen.
+- (Password Manager) Implement automatic lock out after some defined time of inactivity.
+	- Add setting for user to change/remove timer for each password file.
 
 - (New Password File) Check if password is complex (can be done in frontend).
 	- red/yellow/green meter that indicates complexity of password
