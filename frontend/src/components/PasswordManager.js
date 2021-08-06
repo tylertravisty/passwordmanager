@@ -1,10 +1,13 @@
 import React from 'react';
+import './PasswordManager.css';
 import {
 	Link,
 	Redirect
 } from "react-router-dom";
 
 import AddSecret from './AddSecret';
+import DeleteSecret from './DeleteSecret';
+
 import {
 	ErrSecretStoreNotSet
 } from './Error.js';
@@ -14,7 +17,10 @@ class PasswordManager extends React.Component {
 		super(props);
 		this.state = {
 			addSecret: false,
+			deleteSecret: false,
+			deleteSecretIndex: -1,
 			editing: false,
+			originalStore: {},
 			error: "",
 			loaded: false,
 			secretStore: {}
@@ -36,8 +42,14 @@ class PasswordManager extends React.Component {
 	}
 
 	editHandler = event => {
-		this.setState({editing: true});
+		let tempStore = JSON.parse(JSON.stringify(this.state.secretStore));
+		this.setState({originalStore: tempStore, editing: true});
 	};
+
+	cancelEditHandler = event => {
+		let tempStore = JSON.parse(JSON.stringify(this.state.originalStore))
+		this.setState({secretStore: tempStore, editing: false});
+	}
 
 	nameChangeHandler = event => {
 		let tempStore = this.state.secretStore
@@ -46,8 +58,6 @@ class PasswordManager extends React.Component {
 	};
 
 	saveHandler = event => {
-		console.log("Entering save handler");
-		console.log(this.state.secretStore);
 		this.updateSecretStore()
 	}
 
@@ -63,13 +73,6 @@ class PasswordManager extends React.Component {
 	}
 
 	addSecretHandler = event => {
-		//let tempStore = this.state.secretStore;
-		//let newSecret = {name: "New Secret"};
-		//if (!tempStore.categories[0].hasOwnProperty("secrets")) {
-		//	tempStore.categories[0].secrets = [];
-		//}
-		//tempStore.categories[0].secrets.push(newSecret);
-		//this.setState({secretStore: tempStore});
 		this.setState({addSecret: true});
 	}
 
@@ -89,6 +92,21 @@ class PasswordManager extends React.Component {
 		this.setState({addSecret: false});
 	}
 
+	deleteSecretHandler = event => {
+		const index = event.target.getAttribute('value');
+		this.setState({deleteSecret: true, deleteSecretIndex: index});
+	}
+
+	cancelDeleteSecretHandler = event => {
+		this.setState({deleteSecret: false, deleteSecretIndex: -1});
+	}
+
+	confirmDeleteSecretHandler = event => {
+		let tempStore = this.state.secretStore;
+		tempStore.categories[0].secrets.splice(this.state.deleteSecretIndex, 1);
+		this.setState({secretStore: tempStore, deleteSecret: false, deleteSecretIndex: -1});
+	}
+
 	render() {
 		if (this.state.loaded === false) {
 			return (
@@ -105,6 +123,15 @@ class PasswordManager extends React.Component {
 			);
 		}
 
+		if (this.state.deleteSecret) {
+			return (
+				<DeleteSecret
+					cancelDeleteSecretHandler={this.cancelDeleteSecretHandler}
+					confirmDeleteSecretHandler={this.confirmDeleteSecretHandler}
+				/>
+			);
+		}
+
 		if (this.state.error !== "") {
 			if (this.state.error === ErrSecretStoreNotSet) {
 				return (
@@ -116,13 +143,17 @@ class PasswordManager extends React.Component {
 		if (this.state.editing) {
 			return (
 				<div className="App">
-					<Link to={'/unlock'}>
-						<button className="Lock"> Lock </button>
-					</Link>
+					<button className="CancelEdit" onClick={this.cancelEditHandler}> Cancel </button>
 					<button onClick={this.saveHandler}> Save </button>
 					<button onClick={this.addSecretHandler}> Add Secret </button>
 					<h2><input type="text" name="secretStoreName" value={this.state.secretStore.name} onChange={this.nameChangeHandler}/></h2>
-					{JSON.stringify(this.state.secretStore)}
+					<p>Secret   Store: {JSON.stringify(this.state.secretStore)}</p>
+					<p>Original Store: {JSON.stringify(this.state.originalStore)}</p>
+					<ul>
+					{this.state.secretStore.categories[0].secrets.map((secret, index) =>
+					<li key={index}>{secret.name}<span value={index} onClick={this.deleteSecretHandler} className="DeleteSecret">Delete</span></li>
+					)}
+					</ul>
 				</div>
 			)
 		} else {
@@ -132,8 +163,14 @@ class PasswordManager extends React.Component {
 						<button className="Lock"> Lock </button>
 					</Link>
 					<button onClick={this.editHandler}> Edit </button>
-					<h2>{this.state.secretStore.name == "" ? "Empty Name" : this.state.secretStore.name}</h2>
-					{JSON.stringify(this.state.secretStore)}
+					<h2>{this.state.secretStore.name == "" ? "<Empty Name>" : this.state.secretStore.name}</h2>
+					<p>Secret   Store: {JSON.stringify(this.state.secretStore)}</p>
+					<p>Original Store: {JSON.stringify(this.state.originalStore)}</p>
+					<ul>
+					{this.state.secretStore.categories[0].secrets.map((secret, index) =>
+						<li key={index}>{secret.name}</li>
+					)}
+					</ul>
 				</div>
 			)
 		}

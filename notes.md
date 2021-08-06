@@ -3,7 +3,6 @@
 # On Deck
 - (Password Manager) Implement Password Manager page
 	- Display secrets as buttons to their own pages (secret component is a child of PM)
-	- Delete secrets
 	- Develop UI components
 		- secrets, entries
 		- categories(is this needed?)

@@ -70,8 +70,10 @@ func (pm *PasswordManager) SetSecretStore(secretStoreStr string) error {
 	}
 
 	if reflect.DeepEqual(tempStore, *pm.Store) {
+		fmt.Println("EQUAL!!")
 		return nil
 	}
+	fmt.Println("NOT EQUAL!!")
 
 	err = pm.rs.Save([]byte(secretStoreStr))
 	if err != nil {
