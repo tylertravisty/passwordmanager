@@ -5,6 +5,7 @@ import {
 	Redirect
 } from "react-router-dom";
 
+import Secret from './Secret';
 import AddSecret from './AddSecret';
 import DeleteSecret from './DeleteSecret';
 
@@ -23,7 +24,10 @@ class PasswordManager extends React.Component {
 			originalStore: {},
 			error: "",
 			loaded: false,
-			secretStore: {}
+			secretStore: {},
+			stageSecret: false,
+			stageSecretIndex: -1,
+			originalSecret: {}
 		};
 	}
 
@@ -107,6 +111,31 @@ class PasswordManager extends React.Component {
 		this.setState({secretStore: tempStore, deleteSecret: false, deleteSecretIndex: -1});
 	}
 
+	secretHandler = event => {
+		this.setState({stageSecret: true, stageSecretIndex: event.target.getAttribute('value')});
+	}
+
+	secretEditHandler = event => {
+		let tempStore = JSON.parse(JSON.stringify(this.state.secretStore));
+		this.setState({originalStore: tempStore});
+	};
+
+	secretCancelEditHandler = event => {
+		let tempStore = JSON.parse(JSON.stringify(this.state.originalStore))
+		this.setState({secretStore: tempStore});
+	}
+
+	secretBackHandler = event => {
+		this.setState({stageSecret: false, stageSecretIndex: -1});
+	}
+
+	secretNameChangeHandler = event => {
+		let tempIndex = this.state.stageSecretIndex;
+		let tempStore = this.state.secretStore;
+		tempStore.categories[0].secrets[tempIndex].name = event.target.value;
+		this.setState({secretStore: tempStore});
+	};
+
 	render() {
 		if (this.state.loaded === false) {
 			return (
@@ -128,6 +157,20 @@ class PasswordManager extends React.Component {
 				<DeleteSecret
 					cancelDeleteSecretHandler={this.cancelDeleteSecretHandler}
 					confirmDeleteSecretHandler={this.confirmDeleteSecretHandler}
+				/>
+			);
+		}
+
+		if (this.state.stageSecret) {
+			return (
+				<Secret
+					secretBackHandler={this.secretBackHandler}
+					secretEditHandler={this.secretEditHandler}
+					secretCancelEditHandler={this.secretCancelEditHandler}
+					secretSaveHandler={this.saveHandler}
+					secretNameChangeHandler={this.secretNameChangeHandler}
+					secrets={this.state.secretStore.categories[0].secrets}
+					secretIndex={this.state.stageSecretIndex}
 				/>
 			);
 		}
@@ -168,7 +211,7 @@ class PasswordManager extends React.Component {
 					<p>Original Store: {JSON.stringify(this.state.originalStore)}</p>
 					<ul>
 					{this.state.secretStore.categories[0].secrets.map((secret, index) =>
-						<li key={index}>{secret.name}</li>
+						<li key={index} value={index} onClick={this.secretHandler}>{secret.name}</li>
 					)}
 					</ul>
 				</div>
