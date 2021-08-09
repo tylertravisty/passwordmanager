@@ -2,7 +2,12 @@
 
 # On Deck
 - (Password Manager) Implement Password Manager page
-	- Impement adding entries in secrets
+	- Delete entries (implement using hooks-state: https://reactjs.org/docs/hooks-state.html)
+	- Edit entries
+	- Do "Add Secret" and "Add Entry" need to be in Edit stage?
+		- Autosave on create
+		- User can delete if mistake
+		- Only need edit for things that can't be reversed, like deleting.
 	- Develop UI components
 		- secrets, entries
 		- categories(is this needed?)
@@ -10,6 +15,8 @@
 	- Implement random password generation
 
 # To Do
+
+- (CSS) Standardize all "Cancel", "Save", and "Back" button stylings into single CSS file.
 
 - (Password Manager) Password entries should have optional fields: date created, expiration date.
 - (Password Manager) Implement alerts when passwords reach expiration date.

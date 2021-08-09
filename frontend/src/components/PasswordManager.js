@@ -62,7 +62,8 @@ class PasswordManager extends React.Component {
 	};
 
 	saveHandler = event => {
-		this.updateSecretStore()
+		console.log(this);
+		this.updateSecretStore();
 	}
 
 	async updateSecretStore() {
@@ -87,6 +88,7 @@ class PasswordManager extends React.Component {
 		if (!tempStore.categories[0].hasOwnProperty("secrets")) {
 			tempStore.categories[0].secrets = [];
 		}
+		newSecret.entries=[];
 		tempStore.categories[0].secrets.push(newSecret);
 		this.setState({secretStore: tempStore});
 		this.setState({addSecret: false});
@@ -136,6 +138,21 @@ class PasswordManager extends React.Component {
 		this.setState({secretStore: tempStore});
 	};
 
+	secretSubmitEntryHandler = target => {
+		console.log(target);
+		let tempIndex = this.state.stageSecretIndex;
+		let tempStore = this.state.secretStore;
+		if (tempStore.categories[0].secrets[tempIndex].entries === null) {
+			tempStore.categories[0].secrets[tempIndex].entries = [];
+		}
+		let newEntry = {};
+		newEntry.name = target.entryname.value;
+		newEntry.type = target.entrytype.value;
+		newEntry.value = target.entryvalue.value;
+		tempStore.categories[0].secrets[tempIndex].entries.push(newEntry);
+		this.setState({secretStore: tempStore});
+	};
+
 	render() {
 		if (this.state.loaded === false) {
 			return (
@@ -171,6 +188,7 @@ class PasswordManager extends React.Component {
 					secretNameChangeHandler={this.secretNameChangeHandler}
 					secrets={this.state.secretStore.categories[0].secrets}
 					secretIndex={this.state.stageSecretIndex}
+					secretSubmitEntryHandler={this.secretSubmitEntryHandler}
 				/>
 			);
 		}
@@ -206,7 +224,7 @@ class PasswordManager extends React.Component {
 						<button className="Lock"> Lock </button>
 					</Link>
 					<button onClick={this.editHandler}> Edit </button>
-					<h2>{this.state.secretStore.name == "" ? "<Empty Name>" : this.state.secretStore.name}</h2>
+					<h2>{this.state.secretStore.name === "" ? "<Empty Name>" : this.state.secretStore.name}</h2>
 					<p>Secret   Store: {JSON.stringify(this.state.secretStore)}</p>
 					<p>Original Store: {JSON.stringify(this.state.originalStore)}</p>
 					<ul>

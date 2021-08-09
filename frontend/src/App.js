@@ -9,7 +9,6 @@ import PasswordManager from './components/PasswordManager';
 
 import {
 	MemoryRouter as Router,
-	Redirect,
 	Route,
 	Switch,
 	Link
@@ -42,27 +41,6 @@ export default function App() {
 	)
 }
 
-function TestMainMenu() {
-	return (
-		<div className="App">
-			<h2>MainMenu</h2>
-			<Link to="/error">Error</Link><br/>
-			<Link to="/unlock">Unlock</Link><br/>
-			<Link to="/">Home</Link><br/>
-		</div>
-	);
-}
-
-function TestPasswordManager() {
-	return (
-		<div className="App">
-			<h2>Test Password Manager</h2>
-			<Link to="/unlock">Unlock</Link><br/>
-		</div>
-	);
-}
-
-
 function TestError() {
 	return (
 		<div className="App">
@@ -74,87 +52,3 @@ function TestError() {
 	);
 }
 
-
-function TestNewPasswordFile() {
-	return (
-		<div className="App">
-			<h2>NewPasswordFile</h2>
-			<Link to="/mainmenu">MainMenu</Link><br/>
-			<Link to="/unlock">Unlock</Link><br/>
-			<Link to="/">Home</Link><br/>
-		</div>
-	);
-}
-
-function TestUnlock() {
-	return (
-		<div className="App">
-			<h2>Unlock</h2>
-			<Link to="/mainmenu">MainMenu</Link><br/>
-			<Link to="/error">Error</Link><br/>
-			<Link to="/">Home</Link><br/>
-		</div>
-	);
-}
-
-function About() {
-	return (
-		<div className="App">
-			<h2>About</h2>
-			<Link to="/">Home</Link>
-			<Link to="/redir">Redir</Link>
-		</div>
-	);
-}
-
-function Redir() {
-	return (
-		<Redirect to="/" />
-	);
-}
-
-class App2 extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			passwordFile: false,
-			loadError: "",
-		};
-	}
-
-	componentDidMount() {
-		this.onStart()
-	}
-
-	onStart() {
-		console.log("onStart");
-		window.backend.PasswordManager.OnStart().then( () => {
-			console.log("good");
-			this.setState({passwordfile: true});
-		}).catch(error => {
-			if(error !== "Password file path is empty" && error !== "Password file is missing") {
-				this.setState({loadError: error});
-			}
-			this.setState({loadError: error})
-			console.log("not as bad", error)
-		});
-	}
-
-	render () {
-		console.log("render", this.state.passwordFile)
-		if(this.state.passwordFile === false) {
-			return (
-				<div className="App">
-					<MainMenu passwordFile={this.state.passwordFile}/>
-				</div>
-			)
-		}
-		return (
-			<div className="App">
-				<Unlock />
-			</div>
-		);
-	}
-}
-
-//export default App2;

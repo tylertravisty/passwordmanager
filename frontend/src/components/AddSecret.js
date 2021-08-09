@@ -16,7 +16,7 @@ class AddSecret extends React.Component {
 	render() {
 		return (
 			<div>
-				<button onClick={this.props.cancelAddSecretHandler}>Cancel</button>
+				<button className="CancelAddSecret" onClick={this.props.cancelAddSecretHandler}>Cancel</button>
 				<div className="AddSecret">
 					Input secret name:
 					<form onSubmit={this.props.submitSecretNameHandler}>
