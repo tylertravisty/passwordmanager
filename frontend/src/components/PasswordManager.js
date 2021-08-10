@@ -139,7 +139,6 @@ class PasswordManager extends React.Component {
 	};
 
 	secretSubmitEntryHandler = target => {
-		console.log(target);
 		let tempIndex = this.state.stageSecretIndex;
 		let tempStore = this.state.secretStore;
 		if (tempStore.categories[0].secrets[tempIndex].entries === null) {
@@ -152,6 +151,24 @@ class PasswordManager extends React.Component {
 		tempStore.categories[0].secrets[tempIndex].entries.push(newEntry);
 		this.setState({secretStore: tempStore});
 	};
+
+	secretConfirmDeleteEntryHandler = entryIndex => {
+		let tempStore = this.state.secretStore;
+		tempStore.categories[0].secrets[this.state.stageSecretIndex].entries.splice(entryIndex, 1);
+		this.setState({secretStore: tempStore});
+	}
+
+	secretEntryNameChangeHandler = (entryIndex, name) => {
+		let tempStore = this.state.secretStore;
+		tempStore.categories[0].secrets[this.state.stageSecretIndex].entries[entryIndex].name = name;
+		this.setState({secretStore: tempStore});
+	}
+
+	secretEntryValueChangeHandler = (entryIndex, value) => {
+		let tempStore = this.state.secretStore;
+		tempStore.categories[0].secrets[this.state.stageSecretIndex].entries[entryIndex].value = value;
+		this.setState({secretStore: tempStore});
+	}
 
 	render() {
 		if (this.state.loaded === false) {
@@ -189,6 +206,9 @@ class PasswordManager extends React.Component {
 					secrets={this.state.secretStore.categories[0].secrets}
 					secretIndex={this.state.stageSecretIndex}
 					secretSubmitEntryHandler={this.secretSubmitEntryHandler}
+					secretConfirmDeleteEntryHandler={this.secretConfirmDeleteEntryHandler}
+					secretEntryNameChangeHandler={this.secretEntryNameChangeHandler}
+					secretEntryValueChangeHandler={this.secretEntryValueChangeHandler}
 				/>
 			);
 		}
@@ -208,8 +228,6 @@ class PasswordManager extends React.Component {
 					<button onClick={this.saveHandler}> Save </button>
 					<button onClick={this.addSecretHandler}> Add Secret </button>
 					<h2><input type="text" name="secretStoreName" value={this.state.secretStore.name} onChange={this.nameChangeHandler}/></h2>
-					<p>Secret   Store: {JSON.stringify(this.state.secretStore)}</p>
-					<p>Original Store: {JSON.stringify(this.state.originalStore)}</p>
 					<ul>
 					{this.state.secretStore.categories[0].secrets.map((secret, index) =>
 					<li key={index}>{secret.name}<span value={index} onClick={this.deleteSecretHandler} className="DeleteSecret">Delete</span></li>
@@ -225,11 +243,9 @@ class PasswordManager extends React.Component {
 					</Link>
 					<button onClick={this.editHandler}> Edit </button>
 					<h2>{this.state.secretStore.name === "" ? "<Empty Name>" : this.state.secretStore.name}</h2>
-					<p>Secret   Store: {JSON.stringify(this.state.secretStore)}</p>
-					<p>Original Store: {JSON.stringify(this.state.originalStore)}</p>
-					<ul>
+					<ul className="ulSecret">
 					{this.state.secretStore.categories[0].secrets.map((secret, index) =>
-						<li key={index} value={index} onClick={this.secretHandler}>{secret.name}</li>
+						<li className="liSecret" key={index} value={index} onClick={this.secretHandler}>{secret.name}</li>
 					)}
 					</ul>
 				</div>
