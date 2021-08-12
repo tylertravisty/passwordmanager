@@ -7,6 +7,7 @@ import (
 	"os/user"
 	"passwordmanager/internal/config"
 	"passwordmanager/internal/secret"
+	"passwordmanager/pkg/password"
 	"passwordmanager/pkg/securefile"
 	"reflect"
 
@@ -25,6 +26,16 @@ func (pm *PasswordManager) WailsInit(runtime *wails.Runtime) error {
 	pm.runtime = runtime
 	pm.log = runtime.Log.New("Password Manager")
 	return nil
+}
+
+func (pm *PasswordManager) GeneratePassword(upper, lower, number, symbol bool, size int) (string, error) {
+	password, err := password.Generate(upper, lower, number, symbol, size)
+	if err != nil {
+		pm.log.Errorf("Failed to generate password: %v", err)
+		return "", ErrGeneratePasswordFailed
+	}
+
+	return password, nil
 }
 
 func (pm *PasswordManager) GetPasswordFilePath() (string, error) {

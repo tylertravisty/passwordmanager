@@ -3,6 +3,8 @@ package main
 const (
 	ErrConfigFileSave mainError = "Failed to save config file"
 
+	ErrGeneratePasswordFailed mainError = "Failed to generate password"
+
 	ErrInvalidUnlockPassword mainError = "Unlock password is invalid"
 
 	ErrPasswordFilePathInvalid mainError = "Password file path is not valid"

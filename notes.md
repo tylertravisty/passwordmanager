@@ -1,9 +1,12 @@
 # Doing
 
 # On Deck
+- (Password Manager) Add buttons to copy entry values to clipboard.
+	- navigator.clipboard.writeText
 - (Password Manager) Implement Password Manager page
 	- Change "Add Entry" page to just adding new editable item in list within secret edit stage.
-	- Implement random password generation
+		- "Add Entry" button should request "type" first from pre-set list.
+		- If "type" is "password", then add a "Random" button next to item to generate random password.
 	- Do "Add Secret" and "Add Entry" need to be in Edit stage?
 		- Autosave on create
 		- User can delete if mistake
@@ -15,7 +18,6 @@
 
 - (CSS) Standardize all "Cancel", "Save", and "Back" button stylings into single CSS file.
 
-- (Password Manager) Add buttons to copy entry values to clipboard.
 - (Password Manager) Create predefined list of entry types, all user to change while editing.
 - (Password Manager) Refactor code to remove unnecessary classes and convert to functional components instead.
 - (Password Manager) Password entries should have optional fields: date created, expiration date.
