@@ -1,13 +1,7 @@
 # Doing
 
 # On Deck
-- (Password Manager) Add buttons to copy entry values to clipboard in non-edit stage.
-	- navigator.clipboard.writeText
-	- querySelector, ref
-- (Password Manager) Move "Add Entry" button to bottom of list?
 - (Password Manager) Implement Password Manager page
-	- If type is "password", hide plaintext with asterisks in *both* stages
-		- Add "show" button to *both* stages
 	- Do "Add Secret" and "Add Entry" need to be in Edit stage?
 		- Autosave on create
 		- User can delete if mistake
@@ -19,7 +13,11 @@
 
 - (CSS) Standardize all "Cancel", "Save", and "Back" button stylings into single CSS file.
 
+- (Password Manager) Move "Add Entry" button to bottom of list?
 - (Password Manager) Create predefined list of entry types.
+- (Password Manager) Hide/Show behavior
+	- Reset hideShow values whenever user leaves secret screen even if it goes to edit page of respective secret screen?
+	- Does the edit page need to hide the password until user shows it?
 - (Password Manager) Refactor code to remove unnecessary classes and convert to functional components instead.
 - (Password Manager) Password entries should have optional fields: date created, expiration date.
 - (Password Manager) Implement alerts when passwords reach expiration date.

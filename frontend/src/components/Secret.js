@@ -7,6 +7,7 @@ class Secret extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			loaded: false,
 			entryType: "text",
 			stageEdit: false,
 			stageAddEntry: false,
@@ -19,7 +20,9 @@ class Secret extends React.Component {
 			paramNumber: false,
 			paramSymbol: false,
 			paramLength: 12,
-			passwordIndex: -1
+			passwordIndex: -1,
+			hiddenPassword: "************",
+			hideValue: []
 		}
 	}
 
@@ -77,19 +80,17 @@ class Secret extends React.Component {
 
 	copyValueHandler = event => {
 		event.preventDefault();
-		//let testingCodeToCopy = document.querySelector("#testing-code");
-		//testingCodeToCopy.setAttribute("type", "text");
-		//testingCodeToCopy.select();
-		//let success = document.execCommand("copy");
-		//console.log(success);
-
-		//const index = event.target.getAttribute('value');
-		//event.target.getAttribute('name').select();
-		//let success = document.execCommand("copy");
-		//console.log(success);
-		//let entryValue = this.props.secrets[this.props.secretIndex].entries[index].value;
-		//console.log(entryValue);
-		//navigator.clipboard.writeText(entryValue);
+		const index = event.target.getAttribute('value');
+		var input = document.body.appendChild(document.createElement("input"));
+		let entryValue = this.props.secrets[this.props.secretIndex].entries[index].value;
+		if (entryValue === undefined) {
+			entryValue = "";
+		}
+		input.value = entryValue;
+		input.focus();
+		input.select();
+		document.execCommand('copy');
+		input.parentNode.removeChild(input);
 	};
 
 	deleteEntryHandler = event => {
@@ -183,7 +184,39 @@ class Secret extends React.Component {
 		this.setState({paramLength: event.target.value});
 	};
 
+	hideShowHandler = event => {
+		event.preventDefault();
+		const index = event.target.getAttribute('value');
+		let tempHide = this.state.hideValue;
+		let hideShow = tempHide[index];
+		if (hideShow === "Show") {
+			tempHide[index] = "Hide";
+		} else {
+			tempHide[index] = "Show";
+		}
+		this.setState({hideValue: tempHide});
+	}
+
+	componentDidMount() {
+		let tempHide = [];
+		this.props.secrets[this.props.secretIndex].entries.map((entry, index) => {
+			if (entry.type === "password") {
+				tempHide = [...tempHide, "Show"];
+			} else {
+				tempHide = [...tempHide, "Hide"];
+			}
+		});
+
+		this.setState({loaded: true, hideValue: tempHide});
+	}
+
 	render() {
+		if (this.state.loaded === false) {
+			return (
+				<div>Loading</div>
+			);
+		}
+
 		if (this.state.stageDeleteEntry) {
 			return (
 				<DeleteEntry
@@ -242,7 +275,7 @@ class Secret extends React.Component {
 					<h2>{this.props.secrets[this.props.secretIndex].name}</h2>
 					<ul>
 					{this.props.secrets[this.props.secretIndex].entries.map((entry, index) =>
-					<li key={index} value={index} >[{entry.type}]{entry.name}: {entry.value}<span name={entry.value} value={index} className="CopyValue" onClick={this.copyValueHandler}>Copy</span></li>
+					<li key={index} value={index} >[{entry.type}]{entry.name}: {this.state.hideValue[index]==="Show" ? this.state.hiddenPassword : entry.value}<span value={index} className="CopyValue" onClick={this.copyValueHandler}>Copy</span>{entry.type==="password" ? <span value={index} className="HideShow" onClick={this.hideShowHandler}>{this.state.hideValue[index]}</span> : ""}</li>
 					)}
 					</ul>
 				</div>

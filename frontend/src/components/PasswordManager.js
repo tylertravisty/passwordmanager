@@ -62,7 +62,6 @@ class PasswordManager extends React.Component {
 	};
 
 	saveHandler = event => {
-		console.log(this);
 		this.updateSecretStore();
 	}
 
