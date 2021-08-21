@@ -6,3 +6,23 @@
     transform: translate(-50%, -50%);
 }
 
+.UnlockDialog {
+	font-size: 28px;
+}
+
+.UnlockLabel {
+	font-size: 30px;
+}
+
+.UnlockText {
+	color: red;
+}
+
+.UnlockInput {
+	font-size: 28px;
+}
+
+
+.UnlockIcon {
+	fill: #FFFFFF;
+}

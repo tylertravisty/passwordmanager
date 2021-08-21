@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import './bootstrap.min.css';
 import Home from './components/Home';
 import Unlock from './components/Unlock';
 import MainMenu from './components/MainMenu';

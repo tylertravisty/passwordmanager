@@ -1,10 +1,22 @@
 import React from 'react';
-import './PasswordManager.css';
+
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Row from 'react-bootstrap/Row';
+
 import {
 	Link,
 	Redirect
 } from "react-router-dom";
 
+import lock from '../icons/lock.svg';
+import pencilsquare from '../icons/pencilsquare.svg';
+import './PasswordManager.css';
 import Secret from './Secret';
 import AddSecret from './AddSecret';
 import DeleteSecret from './DeleteSecret';
@@ -237,16 +249,32 @@ class PasswordManager extends React.Component {
 		} else {
 			return (
 				<div className="App">
-					<Link to={'/unlock'}>
-						<button className="Lock"> Lock </button>
-					</Link>
-					<button onClick={this.editHandler}> Edit </button>
-					<h2>{this.state.secretStore.name === "" ? "<Empty Name>" : this.state.secretStore.name}</h2>
-					<ul className="ulSecret">
+					<Navbar className="NavTitle">
+						<Nav fill className="bg-primary fixed-top justify-content-center">
+							<Nav.Item>
+								<span className="Title">{this.state.secretStore.name === "" ? "<Empty Name>" : this.state.secretStore.name}</span>
+							</Nav.Item>
+						</Nav>
+					</Navbar>
+					<ListGroup>
 					{this.state.secretStore.categories[0].secrets.map((secret, index) =>
-						<li className="liSecret" key={index} value={index} onClick={this.secretHandler}>{secret.name}</li>
+						<ListGroup.Item action key={index} value={index} onClick={this.secretHandler}>{secret.name}</ListGroup.Item>
 					)}
-					</ul>
+					</ListGroup>
+					<Nav fill className="bg-primary fixed-bottom justify-content-center">
+						<Nav.Item>
+							<Link to={'/unlock'}>
+								<div className="d-grid">
+									<Button className="NavLock" size="lg"><img src={lock}/></Button>
+								</div>
+							</Link>
+						</Nav.Item>
+						<Nav.Item>
+							<div className="d-grid">
+								<Button className="NavEdit" size="lg" onClick={this.editHandler}><img src={pencilsquare}/></Button>
+							</div>
+						</Nav.Item>
+					</Nav>
 				</div>
 			)
 		}

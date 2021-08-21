@@ -1,14 +1,18 @@
 import React from 'react';
-import './Unlock.css';
 import { Redirect } from "react-router-dom";
-
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { ErrInvalidUnlockPassword } from './Error.js';
+
+import './Unlock.css';
+import unlock from '../icons/unlock.svg';
 
 class Unlock extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dialog: "Enter password to unlock",
+			dialog: "",
 			error: "",
 			loaded: false,
 			password: "",
@@ -45,7 +49,7 @@ class Unlock extends React.Component {
 			this.setState({gotoPasswordManager: true});
 		} catch(err) {
 			if (err === ErrInvalidUnlockPassword) {
-				this.setState({dialog: "Invalid password. Try again"});
+				this.setState({dialog: "Invalid password. Try again."});
 			} else {
 				this.setState({error: err});
 			}
@@ -67,11 +71,16 @@ class Unlock extends React.Component {
 
 		return (
 			<div className="Unlock">
-				{this.state.dialog}:
-				<form onSubmit={this.submitPasswordHandler}>
-					<input type="password" name="password" value={this.state.password} onChange={this.passwordChangeHandler}/>
-					<button>Unlock</button>
-				</form>
+				<Form onSubmit={this.submitPasswordHandler}>
+					<Form.Group className="mb-3">
+						<Form.Label className="UnlockLabel">Enter password:</Form.Label>
+						<InputGroup size="lg">
+							<Form.Control type="password" name="password" value={this.state.password} onChange={this.passwordChangeHandler} placeholder="Password" />
+							<Button variant="primary" type="submit"><img src={unlock}/></Button>
+						</InputGroup>
+						<Form.Text className="UnlockText">{this.state.dialog}&nbsp;</Form.Text>
+					</Form.Group>
+				</Form>
 			</div>
 		);
 	}
