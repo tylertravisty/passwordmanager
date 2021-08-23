@@ -7,6 +7,7 @@ import { ErrInvalidUnlockPassword } from './Error.js';
 
 import './Unlock.css';
 import unlock from '../icons/unlock.svg';
+import t_circle from '../icons/travisty_t_circle.png';
 
 class Unlock extends React.Component {
 	constructor(props) {
@@ -73,10 +74,9 @@ class Unlock extends React.Component {
 			<div className="Unlock">
 				<Form onSubmit={this.submitPasswordHandler}>
 					<Form.Group className="mb-3">
-						<Form.Label className="UnlockLabel">Enter password:</Form.Label>
 						<InputGroup size="lg">
 							<Form.Control type="password" name="password" value={this.state.password} onChange={this.passwordChangeHandler} placeholder="Password" />
-							<Button variant="primary" type="submit"><img src={unlock}/></Button>
+							<Button variant="dark" type="submit"><img src={unlock}/></Button>
 						</InputGroup>
 						<Form.Text className="UnlockText">{this.state.dialog}&nbsp;</Form.Text>
 					</Form.Group>

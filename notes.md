@@ -2,8 +2,7 @@
 
 # On Deck
 - (Style) Add styling
-	- Replace "Enter password" text with logo image on Unlock screen
-	- Match Navbar height to bottom nav (large button) height
+	- Should I add an image to the Unlock screen?
 - (Password Manager) Implement Password Manager page
 	- Do "Add Secret" and "Add Entry" need to be in Edit stage?
 		- Autosave on create

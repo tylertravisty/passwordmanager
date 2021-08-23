@@ -250,28 +250,28 @@ class PasswordManager extends React.Component {
 			return (
 				<div className="App">
 					<Navbar className="NavTitle">
-						<Nav fill className="bg-primary fixed-top justify-content-center">
+						<Nav fill className="bg-dark fixed-top justify-content-center">
 							<Nav.Item>
 								<span className="Title">{this.state.secretStore.name === "" ? "<Empty Name>" : this.state.secretStore.name}</span>
 							</Nav.Item>
 						</Nav>
 					</Navbar>
-					<ListGroup>
+					<ListGroup className="SecretList">
 					{this.state.secretStore.categories[0].secrets.map((secret, index) =>
 						<ListGroup.Item action key={index} value={index} onClick={this.secretHandler}>{secret.name}</ListGroup.Item>
 					)}
 					</ListGroup>
-					<Nav fill className="bg-primary fixed-bottom justify-content-center">
+					<Nav fill className="bg-dark fixed-bottom justify-content-center">
 						<Nav.Item>
 							<Link to={'/unlock'}>
 								<div className="d-grid">
-									<Button className="NavLock" size="lg"><img src={lock}/></Button>
+									<Button className="NavLock" variant="dark" size="lg"><img src={lock}/></Button>
 								</div>
 							</Link>
 						</Nav.Item>
 						<Nav.Item>
 							<div className="d-grid">
-								<Button className="NavEdit" size="lg" onClick={this.editHandler}><img src={pencilsquare}/></Button>
+								<Button className="NavEdit" variant="dark" size="lg" onClick={this.editHandler}><img src={pencilsquare}/></Button>
 							</div>
 						</Nav.Item>
 					</Nav>

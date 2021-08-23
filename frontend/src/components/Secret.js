@@ -1,7 +1,26 @@
 import React from 'react';
-import './Secret.css';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Row from 'react-bootstrap/Row';
+
+import {
+	Link,
+	Redirect
+} from "react-router-dom";
+
+import arrow_left from '../icons/arrow-90deg-left.svg';
+import clipboard from '../icons/clipboard.svg';
+import eye from '../icons/eye.svg';
+import eyeslash from '../icons/eye-slash.svg';
+import pencilsquare from '../icons/pencilsquare.svg';
 
 import AddEntry from './AddEntry';
+import './Secret.css';
 
 class Secret extends React.Component {
 	constructor(props) {
@@ -40,11 +59,6 @@ class Secret extends React.Component {
 		this.props.secretSaveHandler();
 		this.setState({stageEdit: false});
 	};
-
-	//addEntryHandler = event => {
-	//	this.setState({stageAddEntry: true});
-
-	//};
 
 	addEntryHandler = event => {
 		event.preventDefault();
@@ -270,14 +284,39 @@ class Secret extends React.Component {
 		} else {
 			return (
 				<div>
-					<button className="SecretBack" onClick={this.props.secretBackHandler}>Back</button>
-					<button onClick={this.editHandler}> Edit </button>
-					<h2>{this.props.secrets[this.props.secretIndex].name}</h2>
-					<ul>
-					{this.props.secrets[this.props.secretIndex].entries.map((entry, index) =>
-					<li key={index} value={index} >[{entry.type}]{entry.name}: {this.state.hideValue[index]==="Show" ? this.state.hiddenPassword : entry.value}<span value={index} className="CopyValue" onClick={this.copyValueHandler}>Copy</span>{entry.type==="password" ? <span value={index} className="HideShow" onClick={this.hideShowHandler}>{this.state.hideValue[index]}</span> : ""}</li>
-					)}
-					</ul>
+					<Navbar className="NavTitle">
+						<Nav fill className="bg-dark fixed-top justify-content-center">
+							<Nav.Item>
+								<span className="Title">{this.props.secrets[this.props.secretIndex].name}</span>
+							</Nav.Item>
+						</Nav>
+					</Navbar>
+					<ListGroup className="EntryList">
+						{this.props.secrets[this.props.secretIndex].entries.map((entry, index) =>
+							<ListGroup.Item>
+									<Row>
+										<Col xs={3} sm={2} md={2} lg={1}>{entry.type}</Col>
+										<Col>{this.state.hideValue[index]==="Show" ? this.state.hiddenPassword : entry.value}</Col>
+										<Col xs={2} style={{display:"flex", justifyContent:"flex-end"}}>
+											{entry.type==="password" ? <Button variant="white" size="sm" value={index} onClick={this.hideShowHandler}>{this.state.hideValue[index]==="Show" ? <img value={index} src={eye}/> : <img value={index} src={eyeslash}/>}</Button> : ""}
+											<Button variant="white" size="sm" value={index} onClick={this.copyValueHandler}><img value={index} src={clipboard}/></Button>
+										</Col>
+									</Row>
+							</ListGroup.Item>
+						)}
+					</ListGroup>
+					<Nav fill className="bg-dark fixed-bottom justify-content-center">
+						<Nav.Item>
+							<div className="d-grid">
+								<Button variant="dark" size="lg" onClick={this.props.secretBackHandler}><img src={arrow_left}/></Button>
+							</div>
+						</Nav.Item>
+						<Nav.Item>
+							<div className="d-grid">
+								<Button variant="dark" size="lg" onClick={this.editHandler}><img src={pencilsquare}/></Button>
+							</div>
+						</Nav.Item>
+					</Nav>
 				</div>
 			);
 		}
