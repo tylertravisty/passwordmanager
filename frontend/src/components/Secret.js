@@ -75,11 +75,21 @@ class Secret extends React.Component {
 		target.entryname = {};
 		target.entrytype = {};
 		target.entryvalue = {};
-		target.entryname.value = "";
+
+		let name = this.state.entryType;
+		target.entryname.value = name.charAt(0).toUpperCase() + name.slice(1);
 		target.entrytype.value = this.state.entryType;
 		target.entryvalue.value = "";
 		this.props.secretSubmitEntryHandler(target);
-		this.setState({stageEntryType: false, entryType: "text"});
+
+		let tempHide = this.state.hideValue;
+		if (this.state.entryType === "password") {
+			tempHide = [...tempHide, "Show"];
+		} else {
+			tempHide = [...tempHide, "Hide"];
+		}
+
+		this.setState({stageEntryType: false, entryType: "text", hideValue: tempHide});
 	};
 
 	cancelAddEntryHandler = event => {
@@ -118,7 +128,10 @@ class Secret extends React.Component {
 
 	confirmDeleteEntryHandler = event => {
 		this.props.secretConfirmDeleteEntryHandler(this.state.deleteEntryIndex);
-		this.setState({stageDeleteEntry: false, deleteEntryIndex: -1});
+
+		let tempHide = this.state.hideValue;
+		tempHide.splice(this.state.deleteEntryIndex, 1);
+		this.setState({stageDeleteEntry: false, deleteEntryIndex: -1, hideValue: tempHide});
 	};
 
 	entryNameChangeHandler = event => {
@@ -295,9 +308,9 @@ class Secret extends React.Component {
 						{this.props.secrets[this.props.secretIndex].entries.map((entry, index) =>
 							<ListGroup.Item>
 									<Row>
-										<Col xs={3} sm={2} md={2} lg={1}>{entry.type}</Col>
+										<Col xs={3} sm={2} md={2} lg={1}>{entry.name}</Col>
 										<Col>{this.state.hideValue[index]==="Show" ? this.state.hiddenPassword : entry.value}</Col>
-										<Col xs={2} style={{display:"flex", justifyContent:"flex-end"}}>
+										<Col className="ButtonCol" xs={2}>
 											{entry.type==="password" ? <Button variant="white" size="sm" value={index} onClick={this.hideShowHandler}>{this.state.hideValue[index]==="Show" ? <img value={index} src={eye}/> : <img value={index} src={eyeslash}/>}</Button> : ""}
 											<Button variant="white" size="sm" value={index} onClick={this.copyValueHandler}><img value={index} src={clipboard}/></Button>
 										</Col>

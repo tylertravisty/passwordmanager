@@ -14,8 +14,12 @@ import {
 	Redirect
 } from "react-router-dom";
 
+import check from '../icons/check2.svg';
 import lock from '../icons/lock.svg';
 import pencilsquare from '../icons/pencilsquare.svg';
+import pluscircle from '../icons/plus-circle.svg';
+import trash from '../icons/trash.svg';
+import xmark from '../icons/x.svg';
 import './PasswordManager.css';
 import Secret from './Secret';
 import AddSecret from './AddSecret';
@@ -235,15 +239,46 @@ class PasswordManager extends React.Component {
 		if (this.state.editing) {
 			return (
 				<div className="App">
-					<button className="CancelEdit" onClick={this.cancelEditHandler}> Cancel </button>
-					<button onClick={this.saveHandler}> Save </button>
-					<button onClick={this.addSecretHandler}> Add Secret </button>
-					<h2><input type="text" name="secretStoreName" value={this.state.secretStore.name} onChange={this.nameChangeHandler}/></h2>
-					<ul>
-					{this.state.secretStore.categories[0].secrets.map((secret, index) =>
-					<li key={index}>{secret.name}<span value={index} onClick={this.deleteSecretHandler} className="DeleteSecret">Delete</span></li>
-					)}
-					</ul>
+					<Navbar className="NavTitle">
+						<Nav fill className="bg-dark fixed-top justify-content-center">
+							<Nav.Item>
+								<span className="Title"><input className="InputTitle" type="text" name="secretStoreName" value={this.state.secretStore.name} onChange={this.nameChangeHandler}/></span>
+							</Nav.Item>
+						</Nav>
+					</Navbar>
+					<ListGroup className="SecretList">
+						{this.state.secretStore.categories[0].secrets.map((secret, index) =>
+						<ListGroup.Item>
+							<Row>
+								<Col>
+									{secret.name}
+								</Col>
+								<Col className="ButtonCol">
+										<Button variant="white" size="sm" value={index} onClick={this.deleteSecretHandler}><img value={index} src={trash}/></Button>
+								</Col>
+							</Row>
+						</ListGroup.Item>
+						)}
+						<ListGroup.Item>
+							<Row>
+								<Col className="CenterButtonCol">
+										<Button variant="white" size="sm" onClick={this.addSecretHandler}><img src={pluscircle}/></Button>
+								</Col>
+							</Row>
+						</ListGroup.Item>
+					</ListGroup>
+					<Nav fill className="bg-dark fixed-bottom justify-content-center">
+						<Nav.Item>
+							<div className="d-grid">
+								<Button className="NavCancel" variant="dark" size="lg" onClick={this.cancelEditHandler}><img src={xmark}/></Button>
+							</div>
+						</Nav.Item>
+						<Nav.Item>
+							<div className="d-grid">
+								<Button className="NavSave" variant="dark" size="lg" onClick={this.saveHandler}><img src={check}/></Button>
+							</div>
+						</Nav.Item>
+					</Nav>
 				</div>
 			)
 		} else {
