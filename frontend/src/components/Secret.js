@@ -14,10 +14,17 @@ import {
 } from "react-router-dom";
 
 import arrow_left from '../icons/arrow-90deg-left.svg';
+import check from '../icons/check2.svg';
 import clipboard from '../icons/clipboard.svg';
+import clipboardcheck from '../icons/clipboard-check.svg';
+import dice from '../icons/dice-3.svg';
 import eye from '../icons/eye.svg';
 import eyeslash from '../icons/eye-slash.svg';
 import pencilsquare from '../icons/pencilsquare.svg';
+import pluscircle from '../icons/plus-circle.svg';
+import question from '../icons/question-circle.svg';
+import trash from '../icons/trash.svg';
+import xmark from '../icons/x.svg';
 
 import AddEntry from './AddEntry';
 import './Secret.css';
@@ -41,7 +48,10 @@ class Secret extends React.Component {
 			paramLength: 12,
 			passwordIndex: -1,
 			hiddenPassword: "************",
-			hideValue: []
+			hideValue: [],
+			clipboard: [],
+			clipboardIndex: -1,
+			intervalID: 0
 		}
 	}
 
@@ -115,6 +125,23 @@ class Secret extends React.Component {
 		input.select();
 		document.execCommand('copy');
 		input.parentNode.removeChild(input);
+
+		let tempClipboard = this.state.clipboard;
+		tempClipboard[index] = !tempClipboard[index];
+
+		const timer = setInterval(() => {
+			let tempClipboard = this.state.clipboard;
+
+			if (tempClipboard[this.state.clipboardIndex]) {
+				clearInterval(this.state.intervalID);
+				this.setState({intervalID: 0});
+			} else {
+				tempClipboard[this.state.clipboardIndex] = !tempClipboard[this.state.clipboardIndex];
+				this.setState({clipboard: tempClipboard});
+			}
+		}, 1000);
+
+		this.setState({clipboard: tempClipboard, clipboardIndex: index, intervalID: timer});
 	};
 
 	deleteEntryHandler = event => {
@@ -225,6 +252,7 @@ class Secret extends React.Component {
 	}
 
 	componentDidMount() {
+		let tempClipboard = [];
 		let tempHide = [];
 		this.props.secrets[this.props.secretIndex].entries.map((entry, index) => {
 			if (entry.type === "password") {
@@ -232,9 +260,10 @@ class Secret extends React.Component {
 			} else {
 				tempHide = [...tempHide, "Hide"];
 			}
+			tempClipboard[index] = true;
 		});
 
-		this.setState({loaded: true, hideValue: tempHide});
+		this.setState({loaded: true, hideValue: tempHide, clipboard: tempClipboard});
 	}
 
 	render() {
@@ -283,15 +312,46 @@ class Secret extends React.Component {
 		if (this.state.stageEdit) {
 			return (
 				<div>
-					<button className="SecretCancelEdit" onClick={this.cancelEditHandler}>Cancel</button>
-					<button onClick={this.saveHandler}> Save </button>
-					<button onClick={this.addEntryHandler}> Add Entry </button>
-					<h2><input type="text" name="secretName" value={this.props.secrets[this.props.secretIndex].name} onChange={this.props.secretNameChangeHandler}/></h2>
-					<ul>
-					{this.props.secrets[this.props.secretIndex].entries.map((entry, index) =>
-					<li key={index}>[{entry.type}]<input type="text" name={index} value={entry.name} onChange={this.entryNameChangeHandler}/>:<input type="text" name={index} onChange={this.entryValueChangeHandler} value={entry.value}/>{entry.type==="password" ? <span value={index} className="RandomPassword" onClick={this.generatePasswordHandler}>Random</span> : ""}<span value={index} onClick={this.deleteEntryHandler} className="DeleteEntry">Delete</span></li>
-					)}
-					</ul>
+					<Navbar className="NavTitle">
+						<Nav fill className="bg-dark fixed-top justify-content-center">
+							<Nav.Item>
+								<span className="Title"><input className="InputTitle" type="text" name="secretName" value={this.props.secrets[this.props.secretIndex].name} onChange={this.props.secretNameChangeHandler}/></span>
+							</Nav.Item>
+						</Nav>
+					</Navbar>
+					<ListGroup className="EntryList">
+						{this.props.secrets[this.props.secretIndex].entries.map((entry, index) =>
+						<ListGroup.Item>
+								<Row>
+									<Col xs={3} sm={2} md={2} lg={1}><input className="InputCol" type="text" name={index} value={entry.name} onChange={this.entryNameChangeHandler}/></Col>
+									<Col><input className="InputCol" type="text" name={index} onChange={this.entryValueChangeHandler} value={entry.value}/></Col>
+									<Col className="ButtonCol" xs={2}>
+										{entry.type==="password" ? <Button variant="white" size="sm" value={index} onClick={this.generatePasswordHandler}><img value={index} src={dice}/></Button> : ""}
+										<Button variant="white" size="sm" value={index} onClick={this.deleteEntryHandler}><img value={index} src={trash}/></Button>
+									</Col>
+								</Row>
+						</ListGroup.Item>
+						)}
+						<ListGroup.Item>
+							<Row>
+								<Col className="CenterButtonCol">
+										<Button variant="white" size="sm" onClick={this.addEntryHandler}><img src={pluscircle}/></Button>
+								</Col>
+							</Row>
+						</ListGroup.Item>
+					</ListGroup>
+					<Nav fill className="bg-dark fixed-bottom justify-content-center">
+						<Nav.Item>
+							<div className="d-grid">
+								<Button className="NavCancel" variant="dark" size="lg" onClick={this.cancelEditHandler}><img src={xmark}/></Button>
+							</div>
+						</Nav.Item>
+						<Nav.Item>
+							<div className="d-grid">
+								<Button className="NavSave" variant="dark" size="lg" onClick={this.saveHandler}><img src={check}/></Button>
+							</div>
+						</Nav.Item>
+					</Nav>
 				</div>
 			);
 		} else {
@@ -312,7 +372,7 @@ class Secret extends React.Component {
 										<Col>{this.state.hideValue[index]==="Show" ? this.state.hiddenPassword : entry.value}</Col>
 										<Col className="ButtonCol" xs={2}>
 											{entry.type==="password" ? <Button variant="white" size="sm" value={index} onClick={this.hideShowHandler}>{this.state.hideValue[index]==="Show" ? <img value={index} src={eye}/> : <img value={index} src={eyeslash}/>}</Button> : ""}
-											<Button variant="white" size="sm" value={index} onClick={this.copyValueHandler}><img value={index} src={clipboard}/></Button>
+											<Button variant="white" size="sm" value={index} onClick={this.copyValueHandler}>{this.state.clipboard[index] ? <img value={index} src={clipboard}/> : <img value={index} src={clipboardcheck}/>}</Button>
 										</Col>
 									</Row>
 							</ListGroup.Item>

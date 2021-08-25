@@ -2,6 +2,11 @@
 
 # On Deck
 - (Style) Add styling
+	- 3 modals
+		- Add secret
+		- Add entry
+		- Delete entry
+	- First start/menu page
 	- Should I add an image to the Unlock screen?
 - (Password Manager) Implement Password Manager page
 	- Do "Add Secret" and "Add Entry" need to be in Edit stage?

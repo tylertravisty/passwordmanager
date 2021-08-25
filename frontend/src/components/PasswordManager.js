@@ -5,6 +5,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
@@ -36,6 +37,7 @@ class PasswordManager extends React.Component {
 			addSecret: false,
 			deleteSecret: false,
 			deleteSecretIndex: -1,
+			deleteSecretName: "",
 			editing: false,
 			originalStore: {},
 			error: "",
@@ -115,7 +117,8 @@ class PasswordManager extends React.Component {
 
 	deleteSecretHandler = event => {
 		const index = event.target.getAttribute('value');
-		this.setState({deleteSecret: true, deleteSecretIndex: index});
+		const name = this.state.secretStore.categories[0].secrets[index].name;
+		this.setState({deleteSecret: true, deleteSecretIndex: index, deleteSecretName: name});
 	}
 
 	cancelDeleteSecretHandler = event => {
@@ -201,7 +204,8 @@ class PasswordManager extends React.Component {
 			);
 		}
 
-		if (this.state.deleteSecret) {
+		//if (this.state.deleteSecret) {
+		if (false) {
 			return (
 				<DeleteSecret
 					cancelDeleteSecretHandler={this.cancelDeleteSecretHandler}
@@ -279,6 +283,7 @@ class PasswordManager extends React.Component {
 							</div>
 						</Nav.Item>
 					</Nav>
+					<DeleteModal show={this.state.deleteSecret} onHide={this.cancelDeleteSecretHandler} secretName={this.state.deleteSecretName} confirmDelete={this.confirmDeleteSecretHandler}/>
 				</div>
 			)
 		} else {
@@ -317,3 +322,28 @@ class PasswordManager extends React.Component {
 }
 
 export default PasswordManager;
+
+function DeleteModal(props) {
+	return (
+		<Modal
+			show={props.show}
+			onHide={props.onHide}
+			animation={false}
+			aria-labelledby="contained-modal-title-vcenter"
+			centered
+		>
+			<Modal.Header closeButton>
+				<Modal.Title id="contained-modal-title-vcenter">
+					Delete {props.secretName}?
+				</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<p>Are you sure you want to delete this secret?</p>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={props.onHide}>Cancel</Button>
+				<Button variant="danger" onClick={props.confirmDelete}>Delete</Button>
+			</Modal.Footer>
+		</Modal>
+	);
+}
