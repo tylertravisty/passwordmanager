@@ -2,10 +2,9 @@
 
 # On Deck
 - (Style) Add styling
-	- 3 modals
-		- Add secret
+	- 2 modals
 		- Add entry
-		- Delete entry
+		- Generate random password
 	- First start/menu page
 	- Should I add an image to the Unlock screen?
 - (Password Manager) Implement Password Manager page

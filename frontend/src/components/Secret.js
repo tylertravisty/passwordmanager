@@ -4,6 +4,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
@@ -39,6 +40,7 @@ class Secret extends React.Component {
 			stageAddEntry: false,
 			stageDeleteEntry: false,
 			deleteEntryIndex: -1,
+			deleteEntryName: "",
 			stageEntryType: false,
 			stagePasswordParameters: false,
 			paramUpper: false,
@@ -49,6 +51,7 @@ class Secret extends React.Component {
 			passwordIndex: -1,
 			hiddenPassword: "************",
 			hideValue: [],
+			hideValueOriginal: [],
 			clipboard: [],
 			clipboardIndex: -1,
 			intervalID: 0
@@ -56,13 +59,23 @@ class Secret extends React.Component {
 	}
 
 	editHandler = event => {
+		let tempHideValue = [];
+		this.state.hideValue.map((hideShow, index) => {
+			tempHideValue[index] = hideShow;
+		});
 		this.props.secretEditHandler();
-		this.setState({stageEdit: true});
+		this.setState({stageEdit: true, hideValueOriginal: tempHideValue});
 	};
 
 	cancelEditHandler = event => {
 		this.props.secretCancelEditHandler();
-		this.setState({stageEdit: false});
+
+		let tempHideValue = [];
+		this.state.hideValueOriginal.map((hideShow, index) => {
+			tempHideValue[index] = hideShow;
+		});
+
+		this.setState({stageEdit: false, hideValue: tempHideValue});
 	};
 
 	saveHandler = event => {
@@ -132,7 +145,7 @@ class Secret extends React.Component {
 		const timer = setInterval(() => {
 			let tempClipboard = this.state.clipboard;
 
-			if (tempClipboard[this.state.clipboardIndex]) {
+			if (!tempClipboard[this.state.clipboardIndex]) {
 				clearInterval(this.state.intervalID);
 				this.setState({intervalID: 0});
 			} else {
@@ -146,11 +159,12 @@ class Secret extends React.Component {
 
 	deleteEntryHandler = event => {
 		const index = event.target.getAttribute('value');
-		this.setState({stageDeleteEntry: true, deleteEntryIndex: index});
+		const name = this.props.secrets[this.props.secretIndex].entries[index].name;
+		this.setState({stageDeleteEntry: true, deleteEntryIndex: index, deleteEntryName: name});
 	};
 
 	cancelDeleteEntryHandler = event => {
-		this.setState({stageDeleteEntry: false, deleteEntryIndex: -1});
+		this.setState({stageDeleteEntry: false, deleteEntryIndex: -1, deleteEntryName: ""});
 	};
 
 	confirmDeleteEntryHandler = event => {
@@ -158,7 +172,7 @@ class Secret extends React.Component {
 
 		let tempHide = this.state.hideValue;
 		tempHide.splice(this.state.deleteEntryIndex, 1);
-		this.setState({stageDeleteEntry: false, deleteEntryIndex: -1, hideValue: tempHide});
+		this.setState({stageDeleteEntry: false, deleteEntryIndex: -1, deleteEntryName: "", hideValue: tempHide});
 	};
 
 	entryNameChangeHandler = event => {
@@ -260,7 +274,7 @@ class Secret extends React.Component {
 			} else {
 				tempHide = [...tempHide, "Hide"];
 			}
-			tempClipboard[index] = true;
+			tempClipboard[index] = false;
 		});
 
 		this.setState({loaded: true, hideValue: tempHide, clipboard: tempClipboard});
@@ -273,7 +287,7 @@ class Secret extends React.Component {
 			);
 		}
 
-		if (this.state.stageDeleteEntry) {
+		if (false) {
 			return (
 				<DeleteEntry
 					cancelDeleteEntryHandler={this.cancelDeleteEntryHandler}
@@ -352,6 +366,7 @@ class Secret extends React.Component {
 							</div>
 						</Nav.Item>
 					</Nav>
+					<DeleteEntryModal show={this.state.stageDeleteEntry} onHide={this.cancelDeleteEntryHandler} entryName={this.state.deleteEntryName} confirmDelete={this.confirmDeleteEntryHandler}/>
 				</div>
 			);
 		} else {
@@ -372,7 +387,7 @@ class Secret extends React.Component {
 										<Col>{this.state.hideValue[index]==="Show" ? this.state.hiddenPassword : entry.value}</Col>
 										<Col className="ButtonCol" xs={2}>
 											{entry.type==="password" ? <Button variant="white" size="sm" value={index} onClick={this.hideShowHandler}>{this.state.hideValue[index]==="Show" ? <img value={index} src={eye}/> : <img value={index} src={eyeslash}/>}</Button> : ""}
-											<Button variant="white" size="sm" value={index} onClick={this.copyValueHandler}>{this.state.clipboard[index] ? <img value={index} src={clipboard}/> : <img value={index} src={clipboardcheck}/>}</Button>
+											<Button variant="white" size="sm" value={index} onClick={this.copyValueHandler}>{this.state.clipboard[index] ? <img value={index} src={clipboardcheck}/> : <img value={index} src={clipboard}/>}</Button>
 										</Col>
 									</Row>
 							</ListGroup.Item>
@@ -397,6 +412,31 @@ class Secret extends React.Component {
 }
 
 export default Secret;
+
+function DeleteEntryModal(props) {
+	return (
+		<Modal
+			show={props.show}
+			onHide={props.onHide}
+			animation={false}
+			aria-labelledby="contained-modal-title-vcenter"
+			centered
+		>
+			<Modal.Header closeButton>
+				<Modal.Title id="contained-modal-title-vcenter">
+					Delete {props.entryName}?
+				</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<p>Are you sure you want to delete this entry?</p>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={props.onHide}>Cancel</Button>
+				<Button variant="danger" onClick={props.confirmDelete}>Delete</Button>
+			</Modal.Footer>
+		</Modal>
+	);
+}
 
 const DeleteEntry = (props) => {
 	return (

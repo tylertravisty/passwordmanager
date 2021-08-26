@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import FormControl from 'react-bootstrap/FormControl';
+import InputGroup from 'react-bootstrap/InputGroup';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
@@ -35,6 +37,7 @@ class PasswordManager extends React.Component {
 		super(props);
 		this.state = {
 			addSecret: false,
+			addSecretName: "",
 			deleteSecret: false,
 			deleteSecretIndex: -1,
 			deleteSecretName: "",
@@ -109,6 +112,22 @@ class PasswordManager extends React.Component {
 		tempStore.categories[0].secrets.push(newSecret);
 		this.setState({secretStore: tempStore});
 		this.setState({addSecret: false});
+	};
+
+	addSecretNameChangeHandler = event => {
+		this.setState({addSecretName: event.target.value});
+	};
+
+	confirmAddSecretHandler = event => {
+		event.preventDefault();
+		let tempStore = this.state.secretStore;
+		let newSecret = {name: this.state.addSecretName};
+		if (!tempStore.categories[0].hasOwnProperty("secrets")) {
+			tempStore.categories[0].secrets = [];
+		}
+		newSecret.entries=[];
+		tempStore.categories[0].secrets.push(newSecret);
+		this.setState({addSecret: false, secretStore: tempStore, addSecretName: ""});
 	};
 
 	cancelAddSecretHandler = event => {
@@ -195,7 +214,7 @@ class PasswordManager extends React.Component {
 			);
 		}
 
-		if (this.state.addSecret) {
+		if (false) {
 			return (
 				<AddSecret
 					submitSecretNameHandler={this.submitSecretNameHandler}
@@ -283,7 +302,8 @@ class PasswordManager extends React.Component {
 							</div>
 						</Nav.Item>
 					</Nav>
-					<DeleteModal show={this.state.deleteSecret} onHide={this.cancelDeleteSecretHandler} secretName={this.state.deleteSecretName} confirmDelete={this.confirmDeleteSecretHandler}/>
+					<DeleteSecretModal show={this.state.deleteSecret} onHide={this.cancelDeleteSecretHandler} secretName={this.state.deleteSecretName} confirmDelete={this.confirmDeleteSecretHandler}/>
+					<AddSecretModal show={this.state.addSecret} onHide={this.cancelAddSecretHandler} secretName={this.state.addSecretName} confirmAddSecret={this.confirmAddSecretHandler} secretNameChangeHandler={this.addSecretNameChangeHandler}/>
 				</div>
 			)
 		} else {
@@ -323,7 +343,7 @@ class PasswordManager extends React.Component {
 
 export default PasswordManager;
 
-function DeleteModal(props) {
+function DeleteSecretModal(props) {
 	return (
 		<Modal
 			show={props.show}
@@ -343,6 +363,34 @@ function DeleteModal(props) {
 			<Modal.Footer>
 				<Button variant="secondary" onClick={props.onHide}>Cancel</Button>
 				<Button variant="danger" onClick={props.confirmDelete}>Delete</Button>
+			</Modal.Footer>
+		</Modal>
+	);
+}
+
+function AddSecretModal(props) {
+	return (
+		<Modal
+			show={props.show}
+			onHide={props.onHide}
+			animation={false}
+			aria-labelledby="contained-modal-title-vcenter"
+			centered
+		>
+			<Modal.Header closeButton>
+				<Modal.Title id="contained-modal-title-vcenter">
+					Add Secret
+				</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<InputGroup>
+					<InputGroup.Text>Input secret name</InputGroup.Text>
+						<FormControl value={props.secretName} onChange={props.secretNameChangeHandler}/>
+					</InputGroup>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={props.onHide}>Cancel</Button>
+				<Button variant="dark" onClick={props.confirmAddSecret}>Add</Button>
 			</Modal.Footer>
 		</Modal>
 	);
