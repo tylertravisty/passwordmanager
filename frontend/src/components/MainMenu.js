@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 import './MainMenu.css';
 
 import { Link } from "react-router-dom";
@@ -52,12 +53,9 @@ class MainMenu extends React.Component {
 
 		return(
 			<div className="MainMenu">
-				Main Menu
-				<div style={{border: !this.state.passwordFilePath === "" ? '2px solid Black':'2px solid Tomato'}}>
 					<Link to={'/newpasswordfile'}>
-						<button > New Password File </button>
+						<Button variant="danger"> New Password File </Button>
 					</Link>
-				</div>
 			</div>
 		);
 	}

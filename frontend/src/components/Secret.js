@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
@@ -194,7 +195,7 @@ class Secret extends React.Component {
 	};
 
 	cancelGeneratePasswordHandler = event => {
-		event.preventDefault();
+		//event.preventDefault();
 		this.setState({
 			stagePasswordParameters: false,
 			paramUpper: false,
@@ -296,7 +297,7 @@ class Secret extends React.Component {
 			);
 		}
 
-		if (this.state.stageEntryType) {
+		if (false) {
 			return (
 				<EntryType
 					submitEntryTypeHandler={this.submitEntryTypeHandler}
@@ -307,7 +308,7 @@ class Secret extends React.Component {
 			);
 		}
 
-		if (this.state.stagePasswordParameters) {
+		if (false) {
 			return (
 				<PasswordParameters
 					cancelGeneratePasswordHandler={this.cancelGeneratePasswordHandler}
@@ -367,6 +368,8 @@ class Secret extends React.Component {
 						</Nav.Item>
 					</Nav>
 					<DeleteEntryModal show={this.state.stageDeleteEntry} onHide={this.cancelDeleteEntryHandler} entryName={this.state.deleteEntryName} confirmDelete={this.confirmDeleteEntryHandler}/>
+					<EntryTypeModal show={this.state.stageEntryType} onHide={this.cancelAddEntryHandler} entryType={this.state.entryType} submitEntryType={this.submitEntryTypeHandler} changeEntryType={this.changeEntryTypeHandler}/>
+					<PasswordParametersModal show={this.state.stagePasswordParameters} onHide={this.cancelGeneratePasswordHandler} submitPasswordParameters={this.submitPasswordParametersHandler} check={this.checkHandler} length={this.lengthHandler} paramUpper={this.state.paramUpper} paramLower={this.state.paramLower} paramNumber={this.state.paramNumber} paramSymbol={this.state.paramSymbol} paramLength={this.state.paramLength}/>
 				</div>
 			);
 		} else {
@@ -450,6 +453,34 @@ const DeleteEntry = (props) => {
 	);
 }
 
+function EntryTypeModal(props) {
+	return (
+		<Modal
+			show={props.show}
+			onHide={props.onHide}
+			animation={false}
+			aria-labelledby="contained-modal-title-vcenter"
+			centered
+		>
+			<Modal.Header closeButton>
+				<Modal.Title id="contained-modal-title-vcenter">
+					Add Entry
+				</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<Form.Select value={props.entryType} onChange={props.changeEntryType} aria-label="Default select example">
+					<option value="password">Password</option>
+					<option value="text">Text</option>
+				</Form.Select>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={props.onHide}>Cancel</Button>
+				<Button variant="dark" onClick={props.submitEntryType}>Submit</Button>
+			</Modal.Footer>
+		</Modal>
+	);
+}
+
 const EntryType = (props) => {
 	return (
 		<div>
@@ -464,6 +495,76 @@ const EntryType = (props) => {
 				<button>Submit</button>
 			</form>
 		</div>
+	);
+}
+
+function PasswordParametersModal(props) {
+	return (
+		<Modal
+			show={props.show}
+			onHide={props.onHide}
+			animation={false}
+			aria-labelledby="contained-modal-title-vcenter"
+			centered
+		>
+			<Modal.Header closeButton>
+				<Modal.Title id="contained-modal-title-vcenter">
+					Randomly Generate Password
+				</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<Form variant="dark">
+					<Form.Check
+						type="checkbox"
+						label="Include upper case letters"
+						id="upper"
+						name="upper"
+						variant="dark"
+						onChange={props.check}
+						checked={props.paramUpper}
+					/>
+					<Form.Check
+						type="checkbox"
+						label="Include lower case letters"
+						id="lower"
+						name="lower"
+						onChange={props.check}
+						checked={props.paramLower}
+					/>
+					<Form.Check
+						type="checkbox"
+						label="Include numbers"
+						id="number"
+						name="number"
+						onChange={props.check}
+						checked={props.paramNumber}
+					/>
+					<Form.Check
+						type="checkbox"
+						label="Include symbols"
+						id="symbol"
+						name="symbol"
+						onChange={props.check}
+						checked={props.paramSymbol}
+					/>
+					<Form.Label inline htmlFor="length">Length: {props.paramLength}</Form.Label>
+					<Form.Range
+						inline
+						id="length"
+						name="length"
+						min="1"
+						max="30"
+						step="1"
+						onChange={props.length}
+						value={props.paramLength}
+					/>
+				</Form>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={props.onHide}>Cancel</Button>
+				<Button variant="dark" onClick={props.submitPasswordParameters}>Submit</Button>
+			</Modal.Footer>
+		</Modal>
 	);
 }
 

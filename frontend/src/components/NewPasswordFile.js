@@ -1,4 +1,7 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import './NewPasswordFile.css';
 import { Redirect } from "react-router-dom";
 
@@ -8,6 +11,7 @@ class NewPasswordFile extends React.Component {
 		this.state = {
 			error: "",
 			dialog: "Set unlock password",
+			subDialog: "",
 			complexity: "",
 			password: "",
 			verifyPassword: "",
@@ -35,12 +39,12 @@ class NewPasswordFile extends React.Component {
 		event.preventDefault();
 		const tempPassword = this.state.inputPassword
 		if (!this.state.showVerify) {
-			this.setState({dialog: "Re-enter password", password: tempPassword, inputPassword: "", showVerify: true})
+			this.setState({dialog: "Re-enter password", subDialog: "", password: tempPassword, inputPassword: "", showVerify: true})
 		} else {
 			if (this.state.password === this.state.inputPassword) {
 				this.createPasswordFile();
 			} else {
-				this.setState({dialog: "Password did not match. Try again", password: "", inputPassword: "", showVerify: false})
+				this.setState({dialog: "Set unlock password", subDialog: "Password did not match. Try again", password: "", inputPassword: "", showVerify: false})
 			}
 		}
 	};
@@ -63,12 +67,16 @@ class NewPasswordFile extends React.Component {
 
 		return (
 			<div className="NewPasswordFile">
-				{this.state.dialog}:
-				<form onSubmit={this.submitPasswordHandler}>
-					<input type="password" name="password" value={this.state.inputPassword} onChange={this.passwordChangeHandler}/>
-					<button>Submit</button>
-				</form>
-				Password complexity: {this.state.complexity}
+				<Form onSubmit={this.submitPasswordHandler}>
+					<Form.Group className="mb-3">
+						<Form.Label className="Dialog">{this.state.dialog}</Form.Label>
+						<InputGroup size="lg">
+							<Form.Control type="password" name="password" value={this.state.inputPassword} onChange={this.passwordChangeHandler} placeholder="Password" />
+							<Button variant="dark" type="submit">Submit</Button>
+						</InputGroup>
+						<Form.Text className="InputPasswordText">{this.state.subDialog}&nbsp;</Form.Text>
+					</Form.Group>
+				</Form>
 			</div>
 		);
 	}
