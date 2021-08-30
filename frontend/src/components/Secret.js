@@ -326,7 +326,7 @@ class Secret extends React.Component {
 
 		if (this.state.stageEdit) {
 			return (
-				<div>
+				<div className="App">
 					<Navbar className="NavTitle">
 						<Nav fill className="bg-dark fixed-top justify-content-center">
 							<Nav.Item>
@@ -374,7 +374,7 @@ class Secret extends React.Component {
 			);
 		} else {
 			return (
-				<div>
+				<div className="App">
 					<Navbar className="NavTitle">
 						<Nav fill className="bg-dark fixed-top justify-content-center">
 							<Nav.Item>

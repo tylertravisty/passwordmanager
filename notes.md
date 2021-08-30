@@ -2,6 +2,7 @@
 
 # On Deck
 - (Style) Add styling
+	- Figure out how to add background color to unlock screen.
 	- Should I add an image to the Unlock screen?
 - (Password Manager) Implement Password Manager page
 	- Do "Add Secret" and "Add Entry" need to be in Edit stage?
